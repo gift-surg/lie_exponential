@@ -145,5 +145,5 @@ and the certainty of results while developing a product, in the circumstance of 
 hinders any quick modification and are a great limitation of freedom to introduce new unexpected concepts from other 
 sources.
 
-Lastly this code is not written by an experienced programmer, but it still has the ambition of being "scientific" 
-i.e. it is open and it can be peer reviewed. Any contribution, comment and improvement from you is therefore welcome.
+Lastly this code has the ambition of being "scientific": it is open and it can be reviewed and corrected. 
+Any contribution, comment and improvement from you is more than welcome.
