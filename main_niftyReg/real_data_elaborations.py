@@ -11,7 +11,7 @@ Set the path to the build reg-apps of niftyReg
 import os
 
 from utils.path_manager import niftyReg_path
-from utils.path_manager_2 import original_images_fp, original_image_skull_less_fp, original_common_space_fp, \
+from utils.path_manager import original_image_skull_less_fp, original_common_space_fp, \
     non_rigid_alignment_aei_fp, flows_aei_fp, deformations_aei_fp, displacements_aei_fp, grids_aei_fp, \
     non_rigid_alignment_o_fp, flows_o_fp, deformations_o_fp, displacements_o_fp, grids_o_fp
 
@@ -200,9 +200,9 @@ if get_deformations:
                               'deformation_AD_' + str(subj) + '_.nii.gz')
 
         cmd, msg = nifty.get_deformation_field(niftyReg_path,
-                                                fixed,
-                                                cpp,
-                                                output)
+                                               fixed,
+                                               cpp,
+                                               output)
 
         print
         print '%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%'

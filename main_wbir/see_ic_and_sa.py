@@ -85,8 +85,6 @@ if __name__ == "__main__":
     with open(os.path.join(path_to_sharing_folder, 'exp_scalar_associativity_methods_table_real_new'), 'rb') as f:
                 methods_sa = pickle.load(f)
 
-    #visualize_methods_sa = methods_sa[:]
-
     visualize_methods_sa = [['ss',        True,      'b',      '-',     '+'],
                             ['gss_aei',   True,      'b',      '--',     'x'],
                             ['gss_ei',    True,      'r',      '--',     '.'],

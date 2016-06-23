@@ -10,11 +10,11 @@ from transformations.s_vf import SVF
 from transformations.s_disp import SDISP
 
 from utils.path_manager import path_to_results_folder, path_to_exp_notes_figures, path_to_exp_notes_tables, \
-    displacements_folder_path_AD, path_to_sharing_folder  # flow - id in Niftyreg are svfs!
+    displacements_folder_path_AD, path_to_sharing_folder
 
 from visualizer.graphs_and_stats_new import plot_custom_time_error_steps
 
-from main.error_exponential.aaa_general_controller import methods_t_s
+from main_error_analysis.aaa_general_controller import methods_t_s
 
 """
 Module for the computation of the scalar associativity of the exponential map.

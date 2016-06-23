@@ -1,5 +1,3 @@
-import copy
-
 import numpy as np
 from matplotlib import pyplot as plt
 import os
@@ -8,16 +6,14 @@ import nibabel as nib
 from transformations import se2_g
 from transformations.s_vf import SVF
 from utils.projective_algebras import get_random_hom_a_matrices
-from utils.path_manager import displacements_folder_path_AD
 
 from utils.aux_functions import grid_generator
 from utils.helper import generate_position_from_displacement
 from utils.resampler import NearestNeighbourResampler
 from utils.image import Image
-from visualizer.fields_at_the_window import triptych_quiver_quiver_quiver, triptych_quiver_quiver_image, \
-    triptych_image_quiver_image, quadrivium_quiver
+from visualizer.fields_at_the_window import triptych_quiver_quiver_quiver, quadrivium_quiver
 
-from utils.path_manager_2 import flows_aei_fp, displacements_aei_fp
+from utils.path_manager import flows_aei_fp, displacements_aei_fp
 
 """
 Module created to show images of the first four data-sets.

@@ -7,16 +7,15 @@ import nibabel as nib
 import pickle
 
 from transformations.s_vf import SVF
-from transformations.s_disp import SDISP
 from utils.fields import Field
 
 from utils.path_manager import path_to_results_folder, path_to_exp_notes_figures, path_to_exp_notes_tables, \
     path_to_sharing_folder
-from utils.path_manager_2 import displacements_aei_fp
+from utils.path_manager import displacements_aei_fp
 
 from visualizer.graphs_and_stats_new import plot_custom_time_error_steps
 
-from main.error_exponential.aaa_general_controller import methods_t_s
+from main_error_analysis.aaa_general_controller import methods_t_s
 
 """
 Mean Jacobian determinant of SVFs exponentiated with several methods.
@@ -163,7 +162,7 @@ if __name__ == "__main__":
                         results_errors_by_slice = [[names_method_considered[j]] + list(jacobians[j, :, subject_num])
                                                    for j in range(num_method_considered)]
 
-                        print 'Subject ' + str(subject_num+1) + '/' + str(num_subjects) + '.'
+                        print 'Subject ' + str(subject_num + 1) + '/' + str(num_subjects) + '.'
                         print 'Jacobians: '
                         print '---------------------------------------------'
                         print tabulate(results_errors_by_slice,

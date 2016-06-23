@@ -148,8 +148,7 @@ if __name__ == "__main__":
     suffix = 'gauss'
     res_errors_gauss            = np.load(os.path.join(path_to_shared_results, 'errors_gauss__6.npy'))
     res_times_gauss             = np.load(os.path.join(path_to_shared_results, 'comp_time_gauss__6.npy'))
-    #res_exp_methods_param_gauss = np.load(os.path.join(path_to_shared_results, 'exp_methods_param_gauss__5'))
-    #res_transf_param_gauss      = np.load(os.path.join(path_to_shared_results, 'transformation_param_' + suffix + '.npy'))
+
     with open(os.path.join(path_to_shared_results, 'exp_methods_param_gauss__6'), 'rb') as f:
         res_transf_param_gauss = pickle.load(f)
 
@@ -457,7 +456,6 @@ if __name__ == "__main__":
     ############
     # Plot ALL #
     ############
-
 
     if see_all:
 

@@ -64,9 +64,9 @@ if __name__ == "__main__":
     path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
 
     fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
+                                                filename_array_errors_output + file_suffix + '.npy')
     fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                       filename_array_comp_time_output + file_suffix + '.npy')
+                                                   filename_array_comp_time_output + file_suffix + '.npy')
     fullpath_transformation_parameters = os.path.join(path_to_results_folder,
                                                       filename_transformation_parameters + file_suffix)
     fullpath_field = os.path.join(path_to_results_folder,
@@ -122,10 +122,10 @@ if __name__ == "__main__":
         omega = (20, 40, 20, 40)  # where to locate the center of the random rotation on the axial plane
 
         parameters = [x_1, y_1, z_1,           # Domain
-                               N,                       # number of samples
-                               interval_theta[0], interval_theta[1],  # interval of the rotations
-                               omega[0], omega[1],      # interval of the center of the rotation x
-                               omega[2], omega[3]] +  list_of_steps  # interval of the center of the rotation y
+                      N,                       # number of samples
+                      interval_theta[0], interval_theta[1],  # interval of the rotations
+                      omega[0], omega[1],      # interval of the center of the rotation x
+                      omega[2], omega[3]] + list_of_steps  # interval of the center of the rotation y
 
         # import methods from external file aaa_general_controller
         methods = methods_t_s
@@ -173,14 +173,14 @@ if __name__ == "__main__":
                     if names_method_considered[m] == 'vode' or names_method_considered[m] == 'lsoda':
                         start = time.time()
                         disp_computed = svf_0.exponential_scipy(integrator=names_method_considered[m],
-                                                                        max_steps=step_input)
+                                                                max_steps=step_input)
                         res_time[m, step_index, s] = (time.time() - start)
 
                     else:
                         start = time.time()
                         disp_computed = svf_0.exponential(algorithm=names_method_considered[m],
-                                                                  s_i_o=s_i_o,
-                                                                  input_num_steps=step_input)
+                                                          s_i_o=s_i_o,
+                                                          input_num_steps=step_input)
                         res_time[m, step_index, s] = (time.time() - start)
 
                     # compute error:
@@ -194,7 +194,7 @@ if __name__ == "__main__":
                     results_times_by_slice = [[names_method_considered[j]] + list(res_time[j, :, s])
                                               for j in range(num_method_considered)]
 
-                    print 'Sample ' + str(s+1) + '/' + str(N) + '.'
+                    print 'Sample ' + str(s + 1) + '/' + str(N) + '.'
                     print 'Errors: '
                     print '---------------------------------------------'
                     print tabulate(results_errors_by_slice,
@@ -221,13 +221,13 @@ if __name__ == "__main__":
         if save_for_sharing:
 
             path_to_sharing_folder = os.path.join(path_to_results_folder, 'sharing_folder')
-            np.save(os.path.join(path_to_sharing_folder, 'errors_se2'+file_suffix), errors)
-            np.save(os.path.join(path_to_sharing_folder, 'comp_time_se2'+file_suffix),    res_time)
+            np.save(os.path.join(path_to_sharing_folder, 'errors_se2' + file_suffix), errors)
+            np.save(os.path.join(path_to_sharing_folder, 'comp_time_se2' + file_suffix),    res_time)
 
-            with open(os.path.join(path_to_sharing_folder, 'exp_methods_param_se2'+file_suffix), 'wb') as f:
+            with open(os.path.join(path_to_sharing_folder, 'exp_methods_param_se2' + file_suffix), 'wb') as f:
                 pickle.dump(parameters, f)
 
-            with open(os.path.join(path_to_sharing_folder, 'exp_methods_table_se2'+file_suffix), 'wb') as f:
+            with open(os.path.join(path_to_sharing_folder, 'exp_methods_table_se2' + file_suffix), 'wb') as f:
                 pickle.dump(methods, f)
 
         print
@@ -304,7 +304,7 @@ if __name__ == "__main__":
 
         # Tabulate Errors
         mean_errors_by_column = [[names_method_considered[j]] + list(mean_errors[j, :])
-                                  for j in range(num_method_considered)]
+                                 for j in range(num_method_considered)]
 
         print '\n'
         print 'Results Errors per steps of the numerical integrators:'
@@ -312,7 +312,7 @@ if __name__ == "__main__":
 
         # Tabulate Times
         mean_times_by_column = [[names_method_considered[j]] + list(mean_errors[j, :])
-                                  for j in range(num_method_considered)]
+                                for j in range(num_method_considered)]
 
         print '\n'
         print 'Results Errors per steps of the numerical integrators:'
@@ -326,7 +326,6 @@ if __name__ == "__main__":
 
         plot_custom_time_error_steps(mean_times,
                                      mean_errors,
-                                     #stdev=stdev_errors,
                                      label_lines=names_method_considered,
                                      additional_field=svf_as_array,
                                      kind='multiple_SE2',

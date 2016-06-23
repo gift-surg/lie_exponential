@@ -450,8 +450,5 @@ if __name__ == "__main__":
                         fig_tag=22
                         )
 
-
-    # single plot to do, paired with a deformed grid:
-
     plt.show()
 

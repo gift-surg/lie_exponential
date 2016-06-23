@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import pickle
 
 from utils.path_manager import path_to_results_folder
-from visualizer.graphs_and_stats_new_2 import triptych_graphs, single_graph
+from visualizer.graphs_and_stats_new_2 import single_graph
 
 
 if __name__ == "__main__":

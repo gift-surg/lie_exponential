@@ -6,7 +6,7 @@ from tabulate import tabulate
 
 from utils.path_manager import path_to_sharing_folder
 from visualizer.graphs_and_stats_new import plot_custom_step_versus_error_multiple, plot_custom_time_error_steps, plot_custom_step_error
-from visualizer.graphs_and_stats_new_2 import plot_ic_and_sa, plot_ic_sa_and_se
+from visualizer.graphs_and_stats_new_2 import plot_ic_sa_and_se
 
 
 if __name__ == "__main__":

@@ -13,7 +13,6 @@ from tabulate import tabulate
 from sympy.core.cache import clear_cache
 
 from utils.path_manager import path_to_results_folder, fullpath_tables_external_folder
-from visualizer.graphs_and_stats_new_2 import triptych_graphs, single_graph
 
 
 if __name__ == "__main__":

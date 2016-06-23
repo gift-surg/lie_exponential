@@ -5,12 +5,8 @@ Aimed to load images and masks and obtain the segmented region.
 import os
 import numpy as np
 import nibabel as nib
-import copy
 
 from utils.image import Image
-
-# Useful folders:
-
 
 root_data = os.path.join('/Users/sebastiano/Documents/UCL/z_data/', 'ipmi_dataset/')
 

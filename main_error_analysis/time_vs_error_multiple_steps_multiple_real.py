@@ -64,9 +64,9 @@ if __name__ == "__main__":
     path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
 
     fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
+                                                filename_array_errors_output + file_suffix + '.npy')
     fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                       filename_array_comp_time_output + file_suffix + '.npy')
+                                                   filename_array_comp_time_output + file_suffix + '.npy')
     fullpath_transformation_parameters = os.path.join(path_to_results_folder,
                                                       filename_transformation_parameters + file_suffix)
     fullpath_field = os.path.join(path_to_results_folder,
@@ -158,17 +158,12 @@ if __name__ == "__main__":
             header_A_C = nib_A_C.header
             affine_A_C = nib_A_C.affine
 
-            array_A_C = data_A_C[pp:-pp, pp:-pp, pp:-pp, :, 0:3]  # [pp:-pp, pp:-pp, pp:-pp, :, 0:3] 256, 124, 256
-            #array_A_C = array_A_C.reshape(252, 252, 1, 1, 2)
-
-            print 'Array shape:'
-            print array_A_C.shape
-            #array_A_C = array_A_C.reshape((252, 1, 252, 1, 1))
+            array_A_C = data_A_C[pp:-pp, pp:-pp, pp:-pp, :, 0:3]
 
             # Create svf over the array:
             svf_0 = SVF.from_array_with_header(array_A_C, header=header_A_C, affine=affine_A_C)
 
-            if s == N-1:
+            if s == N - 1:
                 # Store the vector field (for the image) of the last sample
                 svf_as_array = copy.deepcopy(svf_0.field)
 
@@ -191,14 +186,14 @@ if __name__ == "__main__":
                     if names_method_considered[m] == 'vode' or names_method_considered[m] == 'lsoda':
                         start = time.time()
                         disp_computed = svf_0.exponential_scipy(integrator=names_method_considered[m],
-                                                                        max_steps=step_input)
+                                                                max_steps=step_input)
                         res_time[m, step_index, s] = (time.time() - start)
 
                     else:
                         start = time.time()
                         disp_computed = svf_0.exponential(algorithm=names_method_considered[m],
-                                                                  s_i_o=s_i_o,
-                                                                  input_num_steps=step_input)
+                                                          s_i_o=s_i_o,
+                                                          input_num_steps=step_input)
                         res_time[m, step_index, s] = (time.time() - start)
 
                     # compute error:
@@ -213,7 +208,7 @@ if __name__ == "__main__":
                     results_times_by_slice = [[names_method_considered[j]] + list(res_time[j, :, s])
                                               for j in range(num_method_considered)]
 
-                    print 'Sample ' + str(s+1) + '/' + str(N) + '.'
+                    print 'Sample ' + str(s + 1) + '/' + str(N) + '.'
                     print 'Errors: '
                     print '---------------------------------------------'
                     print tabulate(results_errors_by_slice,
@@ -228,7 +223,7 @@ if __name__ == "__main__":
 
         # Save the parameters:
         parameters = list(array_A_C.shape[:3]) + [ids_element_str] +\
-                              [ground_method, ground_method_steps] + list_of_steps
+                       [ground_method, ground_method_steps] + list_of_steps
 
         ### Save data to folder ###
         np.save(fullpath_array_errors_output,       errors)
@@ -243,14 +238,14 @@ if __name__ == "__main__":
 
         if save_for_sharing:
 
-            np.save(os.path.join(path_to_sharing_folder, 'errors_real'+file_suffix), errors)
-            np.save(os.path.join(path_to_sharing_folder, 'comp_time_real'+file_suffix),    res_time)
-            np.save(os.path.join(path_to_sharing_folder, 'exp_methods_param_real'+file_suffix), methods_t_s)
+            np.save(os.path.join(path_to_sharing_folder, 'errors_real' + file_suffix), errors)
+            np.save(os.path.join(path_to_sharing_folder, 'comp_time_real' + file_suffix),    res_time)
+            np.save(os.path.join(path_to_sharing_folder, 'exp_methods_param_real' + file_suffix), methods_t_s)
 
-            with open(os.path.join(path_to_sharing_folder, 'time_vs_error_param'+file_suffix), 'wb') as f:
+            with open(os.path.join(path_to_sharing_folder, 'time_vs_error_param' + file_suffix), 'wb') as f:
                 pickle.dump(parameters, f)
 
-            with open(os.path.join(path_to_sharing_folder, 'time_vs_error_method'+file_suffix), 'wb') as f:
+            with open(os.path.join(path_to_sharing_folder, 'time_vs_error_method' + file_suffix), 'wb') as f:
                 pickle.dump(methods, f)
 
         print
@@ -326,7 +321,7 @@ if __name__ == "__main__":
 
         # Tabulate Errors
         mean_errors_by_column = [[names_method_considered[j]] + list(mean_errors[j, :])
-                                  for j in range(num_method_considered)]
+                                 for j in range(num_method_considered)]
 
         print '\n'
         print 'Results Errors per steps of the numerical integrators:'
@@ -334,7 +329,7 @@ if __name__ == "__main__":
 
         # Tabulate Times
         mean_times_by_column = [[names_method_considered[j]] + list(mean_times[j, :])
-                                  for j in range(num_method_considered)]
+                                for j in range(num_method_considered)]
 
         print '\n'
         print 'Results Errors per steps of the numerical integrators:'
