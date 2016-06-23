@@ -5,20 +5,22 @@ Libraries: numpy, matplotlib, copy, os, tabulate, sympy, pickle, nibabel, scipy,
 # Log-Euclidean Framework
 
 
-Code initially written for my Master of Research, grounded on the Pankaj's code NiftyBIT.
+Code initially written for my Master of Research, grounded on the Pankaj Daga code NiftyBIT.
 
-From a differential geometry point of view, the set of SVF forms the Lie algebra g of the Lie group G of diffeomorphisms 
-that are embedded in a one parameter subgroup of the group of diffeomorphisms.
+From a differential geometry point of view, the set of stationary velocity field (SVF) constitutes the Lie algebra g 
+of the Lie group G of diffeomorphisms that are embedded in a one parameter subgroup of the group of diffeomorphisms.
 Diffeomorphisms considered are the one defined over a compact subset of R^2 or R^3.
 
 Main aim of the code is the exploration of numerical methods to compute Lie exponential: differential operator that 
-maps a SVF into the corresponding diffeomorphisms through the solution of the the related ordinary differential equation.
+maps a SVF into the corresponding diffeomorphisms through the numerical integration of the the related ordinary 
+differential equation.
 
 Please do consider the references:
 Rudolf Schmidt, Infinite-Dimensional Lie Groups and Algebras in Mathematical physics
-Milnor "Remarks on infinite dimensional Lie Group" 1984
-Milnor "On infinite dimensional Lie groups" IAP preprint 1982
-Holm, Schmah, Stoica "Geometric Mechanics and Symmetry: from finite to infinite dimensions"
+
+1. Milnor "Remarks on infinite dimensional Lie Group" 1984
+2. Milnor "On infinite dimensional Lie groups" IAP preprint 1982
+3. Holm, Schmah, Stoica "Geometric Mechanics and Symmetry: from finite to infinite dimensions"
 
 
 ## Field, images and SVF
@@ -81,9 +83,10 @@ The code has been used to propose some results obtained from the application of 
 Euler and in the Scaling and Squaring integration framework.
 
 Please do consider the references:
-Arsigny et al. "A fast an log-euclidean polyaffine framework for locally linear registration"
-Arsigny et al. "A log-euclidean framework for statistics on diffeomorphisms"
-Yng, Candes "The phase flow method" 
+
+1. Arsigny et al. "A fast an log-euclidean polyaffine framework for locally linear registration"
+2. Arsigny et al. "A log-euclidean framework for statistics on diffeomorphisms"
+3. Yng, Candes "The phase flow method" 
 
 Folder 
 
