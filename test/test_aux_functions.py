@@ -9,7 +9,6 @@ from random import uniform
 
 from utils.aux_functions import split_the_time
 from utils.aux_functions import mod_pipi, bern, bernoulli_poly, bernoulli_numb_via_poly, bch_right_jacobian
-from utils.log_composition import log_composition_se2_a
 import transformations.se2_a as se2_a
 
 from utils.aux_functions import matrix_vector_field_product, matrix_fields_product, matrix_fields_product_iterative, \
@@ -136,18 +135,6 @@ def test_bch_right_jacobian_little_rotation_zero_traslation():
     assert np.alltrue(output == expected_output)
 
 
-''' Test log_composition '''
-
-''' Test BCH ground '''
-
-
-def test_bch_ground_insane_input():
-    element1 = '42'
-    element2 = [1, 2]
-    with assert_raises(Exception):
-        log_composition_se2_a(element1, element2, kind='ground')
-
-
 def test_bch_ground_random_input_comparing_matrices_step_1():
     any_angle_1 = uniform(-np.pi + abs(np.spacing(-np.pi)), np.pi)
     any_tx_1 = uniform(-10, 10)
@@ -162,73 +149,6 @@ def test_bch_ground_random_input_comparing_matrices_step_1():
     exp_exp_pade = lin.expm(a_matrix).real.dot(lin.expm(da_matrix).real).real
     exp_exp_my = se2_a.exp(a)*se2_a.exp(da)
     assert_array_almost_equal(exp_exp_pade, exp_exp_my.get_matrix)
-
-
-# comparing with matrices
-def test_bch_ground_random_input_comparing_matrices():
-    any_angle_1 = uniform(-np.pi + abs(np.spacing(-np.pi)), np.pi)
-    any_tx_1 = uniform(-10, 10)
-    any_ty_1 = uniform(-10, 10)
-    any_angle_2 = uniform(-np.pi + abs(np.spacing(-np.pi)), np.pi)
-    any_tx_2 = uniform(-10, 10)
-    any_ty_2 = uniform(-10, 10)
-    a = se2_a.se2_a(any_angle_1, any_tx_1, any_ty_1)
-    da = se2_a.se2_a(any_angle_2, any_tx_2, any_ty_2)
-    a_matrix = a.get_matrix
-    da_matrix = da.get_matrix
-    bch_pade_matrix = lin.logm(lin.expm(a_matrix).real.dot(lin.expm(da_matrix).real)).real
-    bch_pade_matrix = np.around(bch_pade_matrix, 10)
-    bch_gound_matrix = log_composition_se2_a(a, da, kind='ground').get_matrix
-    assert_array_almost_equal(bch_gound_matrix, bch_pade_matrix)
-
-
-''' Test BCH 0 '''
-
-
-def test_bch_0_insane_input():
-    element1 = '42'
-    element2 = [1, 2]
-    with assert_raises(Exception):
-        log_composition_se2_a(element1, element2, kind='bch0')
-
-
-''' Test BCH 1 '''
-
-
-def test_bch_1_insane_input():
-    element1 = '42'
-    element2 = [1, 2]
-    with assert_raises(Exception):
-        log_composition_se2_a(element1, element2, kind='bch1')
-
-
-''' Test BCH Taylor '''
-
-
-def test_bch_taylor_insane_input():
-    element1 = '42'
-    element2 = [1, 2]
-    with assert_raises(Exception):
-        log_composition_se2_a(element1, element2, kind='taylor')
-
-
-''' Test BCH Parallel Transport '''
-
-
-def test_bch_parallel_transport_insane_input():
-    element1 = '42'
-    element2 = [1, 2]
-    with assert_raises(Exception):
-        log_composition_se2_a(element1, element2, kind='pt')
-
-
-''' Test BCH Parallel Transport '''
-
-
-def test_bch_bch_pt():
-    #element1 =
-    #element1 =
-    pass
 
 
 ''' test split the time '''

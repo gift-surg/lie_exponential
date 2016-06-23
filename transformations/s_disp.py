@@ -18,7 +18,7 @@ class SDISP(Image):
         """
         From nifti_image to S_DEF: stationary deformation field.
         Discretisation of an element in the Lie group of diffeomorphims, defined as
-                         \varphi(x)   in Euleria coordinates
+                         \varphi(x)   in Eulerian coordinates
                          or
                          \varphi(x) - x   in Lagrangian coordinates
         for each point in the grid Omega that represents the discretised domain.

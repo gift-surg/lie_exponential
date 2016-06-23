@@ -88,8 +88,6 @@ def half_lie_bracket_2(left, right):
 
     result = SVF.generate_id_from_obj(left.field)
 
-    # TODO!
-
     result.field.data[..., 0] = \
         (left_jac.data[..., 0] * right.field.data[..., 0] +
          left_jac.data[..., 1] * right.field.data[..., 1]) -\
@@ -103,8 +101,6 @@ def half_lie_bracket_2(left, right):
          right_jac.data[..., 3] * left.field.data[..., 1])
 
 
-
-# compute or load the matrix data:
 compute = False
 
 

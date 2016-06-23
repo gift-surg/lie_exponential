@@ -1,6 +1,4 @@
 import numpy as np
-from numpy.testing import assert_array_equal
-import copy
 import matplotlib.pyplot as plt
 
 from transformations.s_vf import SVF

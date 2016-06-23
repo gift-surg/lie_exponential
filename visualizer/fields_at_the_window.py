@@ -5,10 +5,6 @@ import matplotlib.pyplot as plt
 from utils.fields import Field
 
 
-### Visualiser methods for both 2d and 3d vector fields of class Field or children (Image, SVF, SDISP).
-# TODO: add more options for the visualization graphical effects.
-#       add quiver 3d for vector fields and not only slicing of elements. see_field_3d
-
 def see_field(input_obj,
               anatomical_plane='axial',
               h_slice=0, sample=(1, 1),
@@ -18,16 +14,7 @@ def see_field(input_obj,
               fig_tag=1, scale=1,
               subtract_id=False,
               input_color='b',
-              annotate=None, annotate_position=(1,1)):
-    """
-    Fields visualizer.
-    :param input_obj: object of type Field or children.
-    :param anatomical_plane: if 2d is axial, with slice = 0
-    :param h_slice: the slice of the plane we want to plot
-    :param sample: does not plot all the vertical lines but a subspace
-    :param long_title: add plane and slice information to the title
-    :return: plot the quiver of the svf in the sub-region we are interested in.
-    """
+              annotate=None, annotate_position=(1, 1)):
 
     if not len(input_obj.shape) == 5:
         raise TypeError('Wrong input size for a field')
@@ -51,7 +38,8 @@ def see_field(input_obj,
                    id_field.field[::sample[0], ::sample[1], h_slice, 0, 1],
                    input_field_copy.field[::sample[0], ::sample[1], h_slice, 0, 0],
                    input_field_copy.field[::sample[0], ::sample[1], h_slice, 0, 1],
-                   color=input_color, linewidths=0.01, width=0.03, scale=scale, scale_units='xy', units='xy', angles='xy', )
+                   color=input_color, linewidths=0.01, width=0.03, scale=scale, scale_units='xy', units='xy',
+                   angles='xy')
         ax0.set_xlabel('x')
         ax0.set_ylabel('y')
 
@@ -60,14 +48,16 @@ def see_field(input_obj,
                    id_field[::sample[0], h_slice, ::sample[1], 0, 1],
                    input_field_copy[::sample[0], h_slice, ::sample[1], 0, 0],
                    input_field_copy[::sample[0], h_slice, ::sample[1], 0, 1],
-                   color=input_color, linewidths=0.01, width=0.03, units='xy', angles='xy', scale=scale, scale_units='xy')
+                   color=input_color, linewidths=0.01, width=0.03, units='xy', angles='xy', scale=scale,
+                   scale_units='xy')
 
     elif anatomical_plane == 'coronal':
         ax0.quiver(id_field[h_slice, ::sample[0], ::sample[1], 0, 0],
                    id_field[h_slice, ::sample[0], ::sample[1], 0, 1],
                    input_field_copy[h_slice, ::sample[0], ::sample[1], 0, 0],
                    input_field_copy[h_slice, ::sample[0], ::sample[1], 0, 1],
-                   color=input_color, linewidths=0.01, width=0.03, units='xy', angles='xy', scale=scale, scale_units='xy')
+                   color=input_color, linewidths=0.01, width=0.03, units='xy', angles='xy', scale=scale,
+                   scale_units='xy')
     else:
         raise TypeError('Anatomical_plane must be axial, sagittal or coronal')
 
@@ -83,10 +73,10 @@ def see_field(input_obj,
     if annotate is not None:
         ax0.text(annotate_position[0], annotate_position[1], annotate)
 
-
     plt.axes().set_aspect('equal', 'datalim')
 
     return fig
+
 
 def see_2_fields(input_obj_0, input_obj_1,
                  anatomical_plane_0='axial', anatomical_plane_1='axial',
@@ -97,6 +87,29 @@ def see_2_fields(input_obj_0, input_obj_1,
                  long_title_0=False, long_title_1=False,
                  fig_tag=1, scale_0=1, scale_1=1,
                  subtract_id_0=False, subtract_id_1=False, input_color='b'):
+    """
+
+    :param input_obj_0:
+    :param input_obj_1:
+    :param anatomical_plane_0:
+    :param anatomical_plane_1:
+    :param h_slice_0:
+    :param h_slice_1:
+    :param sample_0:
+    :param sample_1:
+    :param window_title_input:
+    :param title_input_0:
+    :param title_input_1:
+    :param long_title_0:
+    :param long_title_1:
+    :param fig_tag:
+    :param scale_0:
+    :param scale_1:
+    :param subtract_id_0:
+    :param subtract_id_1:
+    :param input_color:
+    :return:
+    """
 
     """
     if not len(input_obj_0.shape) == 5 and len(input_obj_1.shape) == 5:

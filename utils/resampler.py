@@ -1,9 +1,7 @@
 from scipy import ndimage
 
 from image import *
-from helper_2 import generate_identity_deformation, \
-    generate_displacement_from_deformation, \
-    generate_position_from_displacement
+from helper import generate_displacement_from_deformation, generate_position_from_displacement
 
 
 class ImageResampler(object):

@@ -13,7 +13,7 @@ from utils.aux_functions import grid_generator
 from utils.helper import generate_position_from_displacement
 from utils.resampler import NearestNeighbourResampler
 from utils.path_manager import path_to_tmp_folder
-from utils.path_manager_2 import displacements_aei_fp
+from utils.path_manager import displacements_aei_fp
 
 from visualizer.fields_at_the_window import triptych_image_quiver_image
 

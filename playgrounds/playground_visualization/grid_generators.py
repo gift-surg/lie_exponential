@@ -9,7 +9,7 @@ from os.path import join as jph
 from transformations.s_vf import SVF
 
 from utils.aux_functions import grid_generator
-from utils.path_manager_2 import original_common_space_fp
+from utils.path_manager import original_common_space_fp
 
 from visualizer.fields_at_the_window import see_field
 

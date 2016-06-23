@@ -1,16 +1,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import copy
+
 import os
-from scipy.integrate import ode
 
 from utils.fields import Field
 
 from utils.path_manager import path_to_results_folder
 
 from visualizer.fields_at_the_window import see_field
-from visualizer.fields_comparisons import see_overlay_of_n_fields, \
-    see_2_fields_separate_and_overlay, see_n_fields_separate, see_n_fields_special
 
 
 fullpath = os.path.join(path_to_results_folder, 'figures')

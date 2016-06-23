@@ -1,10 +1,7 @@
-
 import numpy as np
-import matplotlib.pyplot as plt
 
 from transformations.s_vf import SVF
 from transformations.s_disp import SDISP
-from utils.image import Image
 
 
 def f_v(t, x):

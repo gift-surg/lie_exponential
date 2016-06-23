@@ -31,11 +31,9 @@ math.factorial(n)
     t3 = Timer(method3, setupstr).timeit(nl)
     t4 = Timer(method4, setupstr).timeit(nl)
 
-
     print 'method2', t2
     print 'method3', t3
     print 'method4', t4
-
 
     print scipy.math.factorial(n)
     print numpy.math.factorial(n)

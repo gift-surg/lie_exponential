@@ -444,10 +444,6 @@ def see_overlay_of_n_fields_3dd(list_of_obj,
     ax0 = fig.add_subplot(111)
     fig.canvas.set_window_title(window_title_input)
 
-
-
-    # TODO check initial values.
-
     for num_obj, input_obj in enumerate(list_of_obj):
 
         if input_obj is not None:

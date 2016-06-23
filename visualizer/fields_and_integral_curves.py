@@ -3,11 +3,8 @@ Visualizer for fields and integral curves, when the
 integrator method exponential_scipy with return_integral_curves=True
 is provided.
 """
-import numpy as np
 import copy
 import matplotlib.pyplot as plt
-
-from utils.fields import Field
 
 
 def see_overlay_of_n_fields_and_flow(list_of_obj,
@@ -17,26 +14,13 @@ def see_overlay_of_n_fields_and_flow(list_of_obj,
                                      anatomical_plane='axial',
                                      h_slice=0, sample=(1, 1),
                                      window_title_input='quiver',
-                                     title_input= '2d vector field',
+                                     title_input='2d vector field',
                                      long_title=False,
                                      fig_tag=1, scale=1,
                                      subtract_id=None,
                                      input_color=('r', 'b'),
                                      input_label=None,
                                      see_tips=False):
-    """
-    :param list_of_obj: list of fields or children, or None.
-    :param anatomical_plane:
-    :param h_slice:
-    :param sample:
-    :param window_title_input:
-    :param title_input:
-    :param long_title:
-    :param fig_tag:
-    :param scale:
-    :param subtract_id:
-    :return:
-    """
 
     fig = plt.figure(fig_tag)
     ax0 = fig.add_subplot(111)
@@ -100,11 +84,9 @@ def see_overlay_of_n_fields_and_flow(list_of_obj,
             ax0.plot(fl[:, 0], fl[:, 1], color='m', lw=1, alpha=alpha_for_integral_curves)
             if see_tips:
                 ax0.plot(fl[0, 0], fl[0, 1], 'go', alpha=0.3)
-                ax0.plot(fl[fl.shape[0]-1, 0], fl[fl.shape[0]-1, 1], 'mo', alpha=0.5)
-
+                ax0.plot(fl[fl.shape[0] - 1, 0], fl[fl.shape[0]-1, 1], 'mo', alpha=0.5)
 
         if input_label is not None:
-            # TODO to add a legend in some painful way...!
             ax0.quiverkey(q, 1.2, 0.515, 2, input_label[num_obj], coordinates='data')
 
         ax0.xaxis.grid(True, linestyle='-', which='major', color='lightgrey', alpha=0.5)

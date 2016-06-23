@@ -18,7 +18,7 @@ class ProjectiveAlgebra(object):
     def __init__(self, d=2, m=np.zeros([3, 3]), special=False):
         """
         """
-        if np.array_equal(m.shape, [d+1]*2):
+        if np.array_equal(m.shape, [d + 1] * 2):
             self.matrix = m  # - np.min(m)*np.ones([d+1, d+1])
             self.dim = d
             self.special = special

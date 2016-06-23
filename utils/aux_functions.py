@@ -41,7 +41,7 @@ def fact(n):
 def bern(n):
     """
     bern(n) \n
-    :param: integer n
+    :param n: integer n
     :return: nth Bernoulli number (type Fraction)
     (iterative algorithm, do not uses polynomials)
     """
@@ -64,7 +64,8 @@ def bern(n):
 def bernoulli_poly(x, n):
     """
     bernoulli_poly(x,n) \n
-    :param: x,n value for the unknown and degree of the polynomial.
+    :param x: value for the unknown.
+    :param n: degree of the polynomial.
     :return: j-th bernoulli polynomial evaluate at x (unknown of the poly).
     """
     return sum([binomial(n, k) * bern(n - k) * (x ** k) for k in range(n)])
@@ -73,7 +74,7 @@ def bernoulli_poly(x, n):
 def bernoulli_numb_via_poly(n):
     """
     bernoulli_numb(n) \n
-    :param: integer n
+    :param n: integer n
     :return: nth Bernoulli number
     (uses first type bernoulli polynomials)
     """
@@ -89,7 +90,7 @@ def bch_right_jacobian(r):
     theta = r[0]
     dtx = r[1]
     dty = r[2]
-    J = np.array([0.0] * 9).reshape(3, 3)
+    j = np.array([0.0] * 9).reshape(3, 3)
     half_theta = theta * 0.5
     tan_half_theta = np.tan(theta * 0.5)
     prec = abs(np.spacing(theta))
@@ -101,15 +102,15 @@ def bch_right_jacobian(r):
         factor1 = theta / 12.0
         factor2 = 1 - (theta ** 2) / 12.0
 
-    J[0, 0] = 1
-    J[1, 0] = - factor1 * dtx + 0.5 * dty
-    J[2, 0] = - 0.5 * dtx - dty * factor1
-    J[1, 1] = factor2
-    J[2, 2] = factor2
-    J[2, 1] = 0.5 * theta
-    J[1, 2] = -0.5 * theta
+    j[0, 0] = 1
+    j[1, 0] = - factor1 * dtx + 0.5 * dty
+    j[2, 0] = - 0.5 * dtx - dty * factor1
+    j[1, 1] = factor2
+    j[2, 2] = factor2
+    j[2, 1] = 0.5 * theta
+    j[1, 2] = -0.5 * theta
 
-    return J
+    return j
 
 
 def split_the_time(t, x, len_range=None, number_of_intervals=5, epsilon=0):
@@ -119,6 +120,7 @@ def split_the_time(t, x, len_range=None, number_of_intervals=5, epsilon=0):
     :param x: values corresponding to the time (same length of t), if t is unordered it will follow the same reordering.
     :param len_range: interval of the data that will be splitted.
     :param number_of_intervals: number of interval in which we want x to be splitted
+    :param epsilon: small margin around the time range
     :return: x_splitted in intervals
     """
 
@@ -130,7 +132,7 @@ def split_the_time(t, x, len_range=None, number_of_intervals=5, epsilon=0):
 
     if len_range is None:
         if epsilon > 0:
-            starting_range = t[0]- epsilon
+            starting_range = t[0] - epsilon
             ending_range   = t[len(t) - 1] + epsilon
         else:
             starting_range = np.floor(t[0])
@@ -173,7 +175,7 @@ def custom_transposer(d, num_col):
     ans = []
 
     for r in range(num_col):  # reminder
-        for q in range(0,len(d),num_col):  # quotient
+        for q in range(0, len(d), num_col):  # quotient
             ans = ans + [d[q + r]]
 
     return ans
@@ -183,7 +185,8 @@ def custom_transposer(d, num_col):
 
 
 def remove_k(l, k):
-    l_new = l[:]; l_new.pop(k)
+    l_new = l[:]
+    l_new.pop(k)
     return l_new
 
 
@@ -191,9 +194,10 @@ def remove_k(l, k):
 
 def get_in_out_liers(data, coeff=0.6745, return_values=True):
     """
-    Input: 1d numpy array
-    Output: position of the outliers in the vector
-    if return_values=False it returns the indexes
+    :param data: 1d numpy array
+    :param coeff:
+    :param return_values:
+    :return: position of the outliers in the vector
     """
     median = np.median(data)
     diff = np.sum(np.abs(data - median))
@@ -247,7 +251,7 @@ def matrix_vector_field_product(j_input, v_input):
     vol = list(v_input.shape[:d])
     extra_ones = len(v_input.shape) - (len(vol) + 1)
 
-    temp = j_input.reshape(vol + [1]*extra_ones + [d, d])  # transform in squared block with additional ones
+    temp = j_input.reshape(vol + [1] * extra_ones + [d, d])  # transform in squared block with additional ones
     return np.einsum('...kl,...l->...k', temp, v_input)
 
 
@@ -266,10 +270,10 @@ def matrix_fields_product(a_input, b_input):
     vol = list(a_input.shape[:d])
     extra_ones = len(a_input.shape) - (len(vol) + 1)
 
-    temp_a = a_input.reshape(vol + [1]*extra_ones + [d, d])  # transform in squared block with additional ones
-    temp_b = b_input.reshape(vol + [1]*extra_ones + [d, d])
+    temp_a = a_input.reshape(vol + [1] * extra_ones + [d, d])  # transform in squared block with additional ones
+    temp_b = b_input.reshape(vol + [1] * extra_ones + [d, d])
 
-    return np.einsum('...kl,...lm', temp_a, temp_b).reshape(vol + [1]*extra_ones + [d*d])
+    return np.einsum('...kl,...lm', temp_a, temp_b).reshape(vol + [1] * extra_ones + [d * d])
 
 
 def matrix_fields_product_iterative(a_input, n=1):
@@ -299,7 +303,7 @@ def id_matrix_field(domain):
     if dim not in [2, 3]:
         assert IOError
 
-    shape = list(domain) + [1]*(4 - dim) + [dim**2]
+    shape = list(domain) + [1] * (4 - dim) + [dim**2]
     flat_id = np.eye(dim).reshape(1, dim**2)
     return np.repeat(flat_id, np.prod(domain)).reshape(shape, order='F')
 

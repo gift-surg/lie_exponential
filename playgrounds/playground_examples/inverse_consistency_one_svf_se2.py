@@ -290,7 +290,3 @@ if __name__ == "__main__":
 
     plt.show()
 
-    ### Save image in external folder ###
-
-    # TODO see bugs and asymmetry of the passepartout in vode. see again the frame selection to show results.
-    # Add selector with or without vode.

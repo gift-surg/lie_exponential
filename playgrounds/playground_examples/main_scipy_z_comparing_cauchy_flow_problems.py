@@ -12,8 +12,6 @@ from transformations.s_vf import SVF
 from utils.path_manager import path_to_results_folder
 
 from visualizer.fields_at_the_window import see_field
-from visualizer.fields_comparisons import see_overlay_of_n_fields, \
-    see_2_fields_separate_and_overlay, see_n_fields_separate, see_n_fields_special
 
 
 ### Visualization methods ###
@@ -29,7 +27,6 @@ def compare_cauchy_flow_integrators(list_of_2_vect_fields,
                                      input_color=('r', 'r'),
                                      color_integral_curves='k',
                                      see_tips=False):
-    #see two fields, one integrated as a Cauchy problem, the other as a Flow problem.
 
     fig = plt.figure(fig_tag, figsize=(10, 6), dpi=100)
     fig.subplots_adjust(left=0.04, right=0.98, top=0.92, bottom=0.08)
@@ -199,6 +196,6 @@ if verbose:
 if show_final:
     compare_cauchy_flow_integrators([svf_1, svf_1], [integral_curves_collector, flows_collector])
     plt.savefig(filename_1, format='png', dpi=400)  # dpi ignored if pdf
-plt.show()
+    plt.show()
 
 
