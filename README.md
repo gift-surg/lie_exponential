@@ -122,7 +122,7 @@ Core method is SVF.exponential in transformations/s_vf
 Run nosetests --exe to see if everything works
 
 
-Programming philosophy: warning the users
+## Programming philosophy: warning the users
 
 It is worth remember that programming is always the choice of the single through the multiple, and the jungle of options 
 and possibilities is so varied and vast that it is not possible to include everything, nor to reach any ideal 
