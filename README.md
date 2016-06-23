@@ -2,9 +2,8 @@ Python 2.7 (.11)
 Libraries: numpy, matplotlib, copy, os, tabulate, sympy, pickle, nibabel, scipy, timeit, math, warnings
 
 
-=======================
-Log-Euclidean Framework
-=======================
+# Log-Euclidean Framework
+
 
 Code initially written for my Master of Research, grounded on the Pankaj's code NiftyBIT.
 
@@ -22,9 +21,7 @@ Milnor "On infinite dimensional Lie groups" IAP preprint 1982
 Holm, Schmah, Stoica "Geometric Mechanics and Symmetry: from finite to infinite dimensions"
 
 
-=====================
-Field, images and SVF
-=====================
+## Field, images and SVF
 
 The OO structure is based on the following structure:
 
@@ -70,18 +67,16 @@ An s_vf can be mapped to an s_disp using the map exponential whose numerical com
 
 Other transformations are the in the finite dimensional Lie group SE(2).
 
-=================================================================
-Lie group and Lie algebra of the rigid body transformations SE(2)
-=================================================================
+
+## Lie group and Lie algebra of the rigid body transformations SE(2)
 
 Within the vector fields, the Lie group of matrices SE(2) and its Lie algebra se(2) are defined as well.
 They can utilized to generate vector fields.
 The exponential and logarithm of these objects possess a closed form that can be utilized as a ground
 truth to validate the numerical methods implemented for their computation of the respective vector fields.
 
-=================================================================
-WBIR 2016
-=================================================================
+## WBIR 2016
+
 The code has been used to propose some results obtained from the application of Exponential Integrators embedded in the
 Euler and in the Scaling and Squaring integration framework.
 
@@ -104,9 +99,8 @@ loads the data saved by the methods contained in the folder main_error_analysis 
 the paper.
  
  
-==============================================================
-Where to start
-==============================================================
+# Where to start
+
 
 Create a folder called results_folder, and link it in the path_manager under utils, erasing the path you find in the 
 code. Path manager is used as well to link the data-sets used in the real case experiments to the code.
@@ -124,9 +118,11 @@ software, and you are invited to reproduce the results using other data-sets.
 
 Core method is SVF.exponential in transformations/s_vf
 
-==============================================================
+## Nosetests
+Run nosetests --exe to see if everything works
+
+
 Programming philosophy: warning the users
-==============================================================
 
 It is worth remember that programming is always the choice of the single through the multiple, and the jungle of options 
 and possibilities is so varied and vast that it is not possible to include everything, nor to reach any ideal 

@@ -8,7 +8,7 @@ import numpy as np
 from numpy.testing import assert_array_almost_equal
 import matplotlib.pyplot as plt
 
-from utils.resampler_2 import DisplacementFieldComposer
+from utils.resampler import DisplacementFieldComposer
 from transformations.s_vf import SVF
 from visualizer.fields_at_the_window import see_field, see_2_fields
 

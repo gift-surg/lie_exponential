@@ -15,9 +15,11 @@ from transformations.se2_a import se2_g
 from visualizer.fields_comparisons import see_n_fields_special
 
 
-def visual_assessment_method_one_se2():
+def test_visual_assessment_method_one_se2(show=False):
     """
-    This test is for visual assessment only.
+    :param show: to add the visualisation of a figure.
+
+    This test is for visual assessment. Please put show to True.
 
     Aimed to test the prototyping of the computation of the exponential map
     with some methods.
@@ -88,11 +90,19 @@ def visual_assessment_method_one_se2():
     print "Norm of the errors:"
     print '--------------------'
 
-    print '|ss - disp|        = ' + str((sdisp_ss - sdisp_0).norm(passe_partout_size=passepartout))
-    print '|ss_pa - disp|     = ' + str((sdisp_ss_pa - sdisp_0).norm(passe_partout_size=passepartout))
-    print '|ss_pa_m - disp|   = ' + str((sdisp_ss_pa_m - sdisp_0).norm(passe_partout_size=passepartout))
+    norm_ss     = (sdisp_ss - sdisp_0).norm(passe_partout_size=passepartout)
+    norm_ss_ei  = (sdisp_ss_pa - sdisp_0).norm(passe_partout_size=passepartout)
+    norm_ss_aei = (sdisp_ss_pa_m - sdisp_0).norm(passe_partout_size=passepartout)
+
+    print '|ss - disp|        = ' + str(norm_ss)
+    print '|ss_pa - disp|     = ' + str(norm_ss_ei)
+    print '|ss_pa_m - disp|   = ' + str(norm_ss_aei)
 
     print
+
+    assert norm_ss < 0.05
+    assert norm_ss_ei < 0.05
+    assert norm_ss_aei < 0.05
 
     print '--------------------'
     print "Computational Times: "
@@ -128,7 +138,5 @@ def visual_assessment_method_one_se2():
                              window_title_input='matrix, random generated',
                              legend_on=False)
 
-    plt.show()
-
-
-visual_assessment_method_one_se2()
+    if show:
+        plt.show()
