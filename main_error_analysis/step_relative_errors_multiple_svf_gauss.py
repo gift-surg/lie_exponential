@@ -58,9 +58,9 @@ if __name__ == "__main__":
     path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
 
     fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
+                                                filename_array_errors_output + file_suffix + '.npy')
     fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                       filename_array_comp_time_output + file_suffix + '.npy')
+                                                    filename_array_comp_time_output + file_suffix + '.npy')
     fullpath_transformation_parameters = os.path.join(path_to_results_folder,
                                                       filename_transformation_parameters + file_suffix)
     fullpath_field = os.path.join(path_to_results_folder,
@@ -170,7 +170,7 @@ if __name__ == "__main__":
 
                 if verbose:
                     results_by_column = [[met, err] for met, err in zip(names_method_considered,
-                                                                        list(step_errors[:, stp-1, s]))]
+                                                                        list(step_errors[:, stp - 1, s]))]
 
                     print 'Step-error for each method computed at ' + str(stp) + 'th. step. for the sample '\
                           + str(s) + '/' + str(N)

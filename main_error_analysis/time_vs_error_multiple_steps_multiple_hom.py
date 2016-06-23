@@ -66,9 +66,9 @@ if __name__ == "__main__":
     path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
 
     fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
+                                                filename_array_errors_output + file_suffix + '.npy')
     fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                       filename_array_comp_time_output + file_suffix + '.npy')
+                                                   filename_array_comp_time_output + file_suffix + '.npy')
     fullpath_transformation_parameters = os.path.join(path_to_results_folder,
                                                       filename_transformation_parameters + file_suffix)
     fullpath_field = os.path.join(path_to_results_folder,
@@ -121,8 +121,8 @@ if __name__ == "__main__":
             shape = list(domain) + [1, 1, 2]
 
             # center of the homography
-            x_c = x_1/2
-            y_c = y_1/2
+            x_c = x_1 / 2
+            y_c = y_1 / 2
             z_c = 1
 
             projective_center = [x_c, y_c, z_c]
@@ -133,14 +133,16 @@ if __name__ == "__main__":
             shape = list(domain) + [1, 3]
 
             # center of the homography
-            x_c = x_1/2
-            y_c = y_1/2
-            z_c = z_1/2
+            x_c = x_1 / 2
+            y_c = y_1 / 2
+            z_c = z_1 / 2
             w_c = 1
 
             projective_center = [x_c, y_c, z_c, w_c]
 
-        # actual matrix in pgl(n) is generated below!
+        scale_factor = 1. / (np.max(domain) * 10)
+        sigma = 1
+        hom_attributes = [scale_factor, sigma, in_psl]
 
         ### import methods from external file aaa_general_controller
         methods = methods_t_s
@@ -167,17 +169,13 @@ if __name__ == "__main__":
 
         for s in range(N):  # sample
 
-            scale_factor = 1./(np.max(domain)*10)
-            sigma = 1
-            hom_attributes = [scale_factor, sigma, in_psl]
-
             h_a, h_g = get_random_hom_a_matrices(d=d,
-                                                  scale_factor=hom_attributes[0],
-                                                  sigma=hom_attributes[1],
-                                                  special=hom_attributes[2])
+                                                 scale_factor=hom_attributes[0],
+                                                 sigma=hom_attributes[1],
+                                                 special=hom_attributes[2])
 
-            h_a = sigma*np.random.randn(d+1,  d+1)
-            h_a = scale_factor * h_a
+            h_a = sigma * np.random.randn(d + 1, d + 1)
+            h_a *= scale_factor
             h_a[-1, :] = np.abs(h_a[-1, :])
 
             h_g = expm(h_a)
@@ -211,7 +209,7 @@ if __name__ == "__main__":
                 svf_as_array = copy.deepcopy(svf_h.field)
 
             elif d == 3:
-                svf_as_array = copy.deepcopy(svf_h.field[:, :, z_c:(z_c+1), :, :2])
+                svf_as_array = copy.deepcopy(svf_h.field[:, :, z_c:(z_c + 1), :, :2])
 
             for step_index, step_input in enumerate(list_of_steps):
 
@@ -221,14 +219,14 @@ if __name__ == "__main__":
                     if names_method_considered[m] == 'vode' or names_method_considered[m] == 'lsoda':
                         start = time.time()
                         disp_computed = svf_h.exponential_scipy(integrator=names_method_considered[m],
-                                                                        max_steps=step_input)
+                                                                max_steps=step_input)
                         res_time[m, step_index, s] = (time.time() - start)
 
                     else:
                         start = time.time()
                         disp_computed = svf_h.exponential(algorithm=names_method_considered[m],
-                                                                  s_i_o=s_i_o,
-                                                                  input_num_steps=step_input)
+                                                          s_i_o=s_i_o,
+                                                          input_num_steps=step_input)
                         res_time[m, step_index, s] = (time.time() - start)
 
                     # compute error:
@@ -242,7 +240,7 @@ if __name__ == "__main__":
                     results_times_by_slice = [[names_method_considered[j]] + list(res_time[j, :, s])
                                               for j in range(num_method_considered)]
 
-                    print 'Sample ' + str(s+1) + '/' + str(N) + '.'
+                    print 'Sample ' + str(s + 1) + '/' + str(N) + '.'
                     print 'Errors: '
                     print '---------------------------------------------'
                     print tabulate(results_errors_by_slice,
@@ -361,7 +359,7 @@ if __name__ == "__main__":
 
     # Tabulate Errors
     mean_errors_by_column = [[names_method_considered[j]] + list(mean_errors[j, :])
-                              for j in range(num_method_considered)]
+                             for j in range(num_method_considered)]
 
     print '\n'
     print 'Results Errors per steps of the numerical integrators:'
@@ -369,7 +367,7 @@ if __name__ == "__main__":
 
     # Tabulate Times
     mean_times_by_column = [[names_method_considered[j]] + list(mean_errors[j, :])
-                              for j in range(num_method_considered)]
+                            for j in range(num_method_considered)]
 
     print '\n'
     print 'Results Errors per steps of the numerical integrators:'

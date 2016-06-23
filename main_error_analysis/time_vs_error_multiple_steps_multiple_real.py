@@ -12,7 +12,7 @@ from transformations.s_vf import SVF
 
 from utils.path_manager import path_to_results_folder, path_to_exp_notes_figures, path_to_exp_notes_tables, \
     path_to_sharing_folder
-from utils.path_manager_2 import displacements_aei_fp
+from utils.path_manager import displacements_aei_fp
 
 from visualizer.graphs_and_stats_new import plot_custom_time_error_steps
 

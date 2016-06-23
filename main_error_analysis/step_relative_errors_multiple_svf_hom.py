@@ -57,9 +57,9 @@ if __name__ == "__main__":
     path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
 
     fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
+                                                filename_array_errors_output + file_suffix + '.npy')
     fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                       filename_array_comp_time_output + file_suffix + '.npy')
+                                                   filename_array_comp_time_output + file_suffix + '.npy')
     fullpath_transformation_parameters = os.path.join(path_to_results_folder,
                                                       filename_transformation_parameters + file_suffix)
     fullpath_field = os.path.join(path_to_results_folder,
@@ -101,8 +101,8 @@ if __name__ == "__main__":
             shape = list(domain) + [1, 1, 2]
 
             # center of the homography
-            x_c = x_1/2
-            y_c = y_1/2
+            x_c = x_1 / 2
+            y_c = y_1 / 2
             z_c = 1
 
             projective_center = [x_c, y_c, z_c]
@@ -113,12 +113,15 @@ if __name__ == "__main__":
             shape = list(domain) + [1, 3]
 
             # center of the homography
-            x_c = x_1/2
-            y_c = y_1/2
-            z_c = z_1/2
+            x_c = x_1 / 2
+            y_c = y_1 / 2
+            z_c = z_1 / 2
             w_c = 1
 
             projective_center = [x_c, y_c, z_c, w_c]
+
+        scale_factor = 1. / (np.max(domain) * 10)
+        hom_attributes = [d, scale_factor, 1, in_psl]
 
         max_steps = 20  # maximal number of consecutive steps where to compute the step-relative error
 
@@ -148,10 +151,7 @@ if __name__ == "__main__":
 
         for s in range(N):
 
-            # Generate SVF and displacement:
-            scale_factor = 1./(np.max(domain)*10)
-            hom_attributes = [d, scale_factor, 1, in_psl]
-
+            # Generate SVF and displacement
             h_a, h_g = get_random_hom_a_matrices(d=hom_attributes[0],
                                                  scale_factor=hom_attributes[1],
                                                  sigma=hom_attributes[2],
@@ -170,7 +170,7 @@ if __name__ == "__main__":
             if d == 2:
                 svf_as_array = copy.deepcopy(svf_0.field)
             elif d == 3:
-                svf_as_array = copy.deepcopy(svf_0.field[:, :, z_c:(z_c+1), :, :2])
+                svf_as_array = copy.deepcopy(svf_0.field[:, :, z_c:(z_c + 1), :, :2])
 
             # init storage of step = step -1 and step = step
             sdisp_step_j_0 = []
@@ -218,7 +218,7 @@ if __name__ == "__main__":
                 if verbose:
                     # show result at each step.
                     results_by_column = [[met, err] for met, err in zip(names_method_considered,
-                                                                        list(step_errors[:, stp-1, s]))]
+                                                                        list(step_errors[:, stp - 1, s]))]
 
                     print 'Step-error for each method computed at ' + str(stp) + 'th. step. Sample ' + str(s) + '/N'
                     print '---------------------------------------------'

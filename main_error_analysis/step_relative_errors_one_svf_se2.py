@@ -58,9 +58,9 @@ if __name__ == "__main__":
     path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
 
     fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
+                                                filename_array_errors_output + file_suffix + '.npy')
     fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                       filename_array_comp_time_output + file_suffix + '.npy')
+                                                   filename_array_comp_time_output + file_suffix + '.npy')
     fullpath_transformation_parameters = os.path.join(path_to_results_folder,
                                                       filename_transformation_parameters + file_suffix)
     fullpath_field = os.path.join(path_to_results_folder,
@@ -93,9 +93,9 @@ if __name__ == "__main__":
             domain = (x_1, y_1, z_1)
             shape = list(domain) + [1, 3]
 
-        x_c = np.floor(x_1/2)
-        y_c = np.floor(y_1/2)
-        theta = np.pi/8
+        x_c = np.floor(x_1 / 2)
+        y_c = np.floor(y_1 / 2)
+        theta = np.pi / 8
 
         tx   = (1 - np.cos(theta)) * x_c + np.sin(theta) * y_c
         ty   = -np.sin(theta) * x_c + (1 - np.cos(theta)) * y_c
@@ -173,7 +173,7 @@ if __name__ == "__main__":
                 sdisp_step_j_1 += [disp_computed]
 
                 # Compute the step error and store in the vector step_error
-                step_errors[met, stp-1] = (sdisp_step_j_1[met] -   sdisp_step_j_0[met]).norm(passe_partout_size=pp)
+                step_errors[met, stp - 1] = (sdisp_step_j_1[met] - sdisp_step_j_0[met]).norm(passe_partout_size=pp)
 
             # copy sdisp_step_j_1 in sdisp_step_j_0 for the next step
             sdisp_step_j_0 = copy.deepcopy(sdisp_step_j_1)
@@ -183,7 +183,7 @@ if __name__ == "__main__":
             if verbose:
                 # show result at each step.
                 results_by_column = [[met, err] for met, err in zip(names_method_considered,
-                                                                    list(step_errors[:, stp-1]))]
+                                                                    list(step_errors[:, stp - 1]))]
 
                 print 'Step ' + str(stp + 1) + '/' + str(max_steps) + '.'
                 print '---------------------------------------------'
@@ -265,8 +265,8 @@ if __name__ == "__main__":
 
     if plot_results:
 
-        plot_custom_step_error(range(1, max_steps-1),
-                               step_errors[:, 1:max_steps-1],
+        plot_custom_step_error(range(1, max_steps - 1),
+                               step_errors[:, 1:max_steps - 1],
                                names_method_considered,
                                input_parameters=parameters,
                                fig_tag=2,

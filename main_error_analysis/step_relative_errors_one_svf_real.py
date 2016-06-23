@@ -10,7 +10,7 @@ import pickle
 from transformations.s_vf import SVF
 
 from utils.path_manager import path_to_results_folder, path_to_exp_notes_figures, path_to_exp_notes_tables
-from utils.path_manager_2 import displacements_aei_fp
+from utils.path_manager import displacements_aei_fp
 
 from visualizer.graphs_and_stats_new import plot_custom_step_error
 
@@ -60,9 +60,9 @@ if __name__ == "__main__":
     path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
 
     fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
+                                                filename_array_errors_output + file_suffix + '.npy')
     fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                       filename_array_comp_time_output + file_suffix + '.npy')
+                                                   filename_array_comp_time_output + file_suffix + '.npy')
     fullpath_transformation_parameters = os.path.join(path_to_results_folder,
                                                       filename_transformation_parameters + file_suffix)
     fullpath_field = os.path.join(path_to_results_folder,
@@ -115,8 +115,7 @@ if __name__ == "__main__":
 
         # Init results
         svf_as_array = None
-        step_errors  = np.zeros([num_method_considered, max_steps ])  # Methods x Steps
-        # At step_errors[met, step] = norm(exp(svf,step) - exp(svf,step-1)
+        step_errors  = np.zeros([num_method_considered, max_steps])
 
         disp_name_A_C = 'displacement_AD_' + str(id_element) + '_.nii.gz'
         # Load as nib:
@@ -155,7 +154,7 @@ if __name__ == "__main__":
             sdisp_step_j_0 += [disp_computed]
 
         # start the main cycle with sdisp_step_j_0 initialized:
-        for stp in range(2, max_steps ):
+        for stp in range(2, max_steps):
             for met in range(num_method_considered):
 
                 # Compute the displacement with the selected method:
@@ -172,7 +171,7 @@ if __name__ == "__main__":
                 sdisp_step_j_1 += [disp_computed]
 
                 # Compute the step error and store in the vector step_error
-                step_errors[met, stp-1] = (sdisp_step_j_1[met] -   sdisp_step_j_0[met]).norm(passe_partout_size=pp)
+                step_errors[met, stp - 1] = (sdisp_step_j_1[met] - sdisp_step_j_0[met]).norm(passe_partout_size=pp)
 
             # copy sdisp_step_j_1 in sdisp_step_j_0 for the next step
             sdisp_step_j_0 = copy.deepcopy(sdisp_step_j_1)
@@ -182,7 +181,7 @@ if __name__ == "__main__":
             if verbose:
                 # show result at each step.
                 results_by_column = [[met, err] for met, err in zip(names_method_considered,
-                                                                    list(step_errors[:, stp-1]))]
+                                                                    list(step_errors[:, stp - 1]))]
 
                 print 'Step-error for each method computed at ' + str(stp) + 'th. step out of ' + str(parameters[4])
                 print '---------------------------------------------'
@@ -263,8 +262,8 @@ if __name__ == "__main__":
 
     if plot_results:
 
-        plot_custom_step_error(range(1, max_steps-1),
-                               step_errors[:, 1:max_steps-1],
+        plot_custom_step_error(range(1, max_steps - 1),
+                               step_errors[:, 1:max_steps - 1],
                                names_method_considered,
                                input_parameters=parameters,
                                fig_tag=2,

@@ -56,9 +56,9 @@ if __name__ == "__main__":
     path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
 
     fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
+                                                filename_array_errors_output + file_suffix + '.npy')
     fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                       filename_array_comp_time_output + file_suffix + '.npy')
+                                                   filename_array_comp_time_output + file_suffix + '.npy')
     fullpath_transformation_parameters = os.path.join(path_to_results_folder,
                                                       filename_transformation_parameters + file_suffix)
     fullpath_field = os.path.join(path_to_results_folder,
@@ -109,7 +109,7 @@ if __name__ == "__main__":
                       omega[2], omega[3],       # interval of the center of the rotation y
                       max_steps]
 
-        file_suffix = '_' + str(interval_theta[0]) + '_' +  str(interval_theta[1]) + '_' + str(N)
+        file_suffix = '_' + str(interval_theta[0]) + '_' + str(interval_theta[1]) + '_' + str(N)
 
         # import methods from external file aaa_general_controller
         methods = methods_t_s
@@ -172,7 +172,8 @@ if __name__ == "__main__":
 
                     sdisp_step_j_1 += [disp_computed]
 
-                    step_errors[met, stp-1, s] = (sdisp_step_j_1[met] - sdisp_step_j_0[met]).norm(passe_partout_size=pp)
+                    step_errors[met, stp - 1, s] =\
+                        (sdisp_step_j_1[met] - sdisp_step_j_0[met]).norm(passe_partout_size=pp)
 
                 sdisp_step_j_0 = copy.deepcopy(sdisp_step_j_1)
                 sdisp_step_j_1 = []
@@ -180,7 +181,7 @@ if __name__ == "__main__":
                 if verbose:
 
                     results_by_column = [[met, err] for met, err in zip(names_method_considered,
-                                                                        list(step_errors[:, stp-1, s]))]
+                                                                        list(step_errors[:, stp - 1, s]))]
 
                     print 'Step-error for each method computed at ' + str(stp) + 'th. step. for the sample '\
                           + str(s) + '/' + str(N)
@@ -281,8 +282,8 @@ if __name__ == "__main__":
         print len(color_methods_considered)
         print color_methods_considered
 
-        plot_custom_step_error(range(1, max_steps-1),
-                               step_errors_mean[:, 1:max_steps-1],
+        plot_custom_step_error(range(1, max_steps - 1),
+                               step_errors_mean[:, 1:max_steps - 1],
                                names_method_considered,
                                stdev=None,
                                input_parameters=parameters,
