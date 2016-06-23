@@ -1,5 +1,6 @@
 Python 2.7 (.11)
-Libraries: 
+Libraries: numpy, matplotlib, copy, os, tabulate, sympy, pickle, nibabel, scipy, timeit, math
+
 
 =======================
 Log-Euclidean Framework
