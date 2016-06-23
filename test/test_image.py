@@ -366,10 +366,10 @@ def test_image_constructor_empty_image_1d():
     im_0 = Image.generate_zero(shape_input, affine=np.eye(4))
     assert_equals(im_0.__class__.__name__, 'Image')
     assert_array_equal(im_0.field, np.zeros(shape_input))
-    assert_equals(im_0.time_points, 0)
+    assert_equals(im_0.time_points, 1)
     assert_array_equal(im_0.vol_ext, (1, 1, 1))
     assert_array_equal(im_0.zooms, tuple([1.0] * 3))
-    assert_equals(im_0.dim, 0)
+    assert_almost_equal(im_0.dim, 0)
 
 
 def test_image_constructor_empty_image_non_id_affine():

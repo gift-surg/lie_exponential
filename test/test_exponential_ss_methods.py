@@ -33,7 +33,7 @@ def visual_assessment_method_one_se2():
 
     x_c = 7
     y_c = 7
-    theta = np.pi/4
+    theta = np.pi / 4
 
     tx   = (1 - np.cos(theta)) * x_c + np.sin(theta) * y_c
     ty   = -np.sin(theta) * x_c + (1 - np.cos(theta)) * y_c
@@ -65,11 +65,11 @@ def visual_assessment_method_one_se2():
     res_time[0] = (time.time() - start)
 
     start = time.time()
-    sdisp_ss_pa   = svf_0.exponential(algorithm='ss_pa',     s_i_o=spline_interpolation_order)
+    sdisp_ss_pa   = svf_0.exponential(algorithm='gss_ei',     s_i_o=spline_interpolation_order)
     res_time[1] = (time.time() - start)
 
     start = time.time()
-    sdisp_ss_pa_m = svf_0.exponential(algorithm='ss_pa_mod',     s_i_o=spline_interpolation_order)
+    sdisp_ss_pa_m = svf_0.exponential(algorithm='gss_aei',     s_i_o=spline_interpolation_order)
     res_time[2] = (time.time() - start)
 
     ########

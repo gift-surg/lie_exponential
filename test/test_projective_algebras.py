@@ -118,21 +118,6 @@ def test_randomgen_psl_a_2():
     m1 = ProjectiveAlgebra.randomgen(d=dd, special=True)
 
     # special linear algebra element must have trace = 0.
-    assert_equals(np.trace(m1.matrix), 0)
+    assert_almost_equal(np.trace(m1.matrix), 0)
     # special linear group element should have det = 1.
     assert_almost_equal(np.linalg.det(m1.exponentiate().matrix), 1)
-
-
-test_init_pgl_a_fake_input()
-test_init_pgl_a_good_input()
-test_randomgen_pgl_a()
-test_exponentiate_pgl_a_1()
-test_exponentiate_pgl_a_2()
-test_ode_solution_pgl_a_1()
-test_ode_solution_pgl_a_2()
-
-test_generated_psl_a()
-test_generated_psl_a_1()
-test_randomgen_psl_a_2()
-
-# random_kind to be tested

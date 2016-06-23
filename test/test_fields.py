@@ -33,7 +33,7 @@ def test_initialisation_stationary_2d_scalar_field():
     field_1 = Field(array)
 
     assert_array_equal(field_1.field, array)
-    assert_equals(field_1.time_points, 0)
+    assert_equals(field_1.time_points, 1)
     assert_equals(field_1.vol_ext, (5, 6))
     assert_equals(field_1.shape, (5, 6))
     assert_equals(field_1.dim, 2)
@@ -44,7 +44,7 @@ def test_initialisation_stationary_3d_scalar_field():
     field_1 = Field(array)
 
     assert_array_equal(field_1.field, array)
-    assert_equals(field_1.time_points, 0)
+    assert_equals(field_1.time_points, 1)
     assert_equals(field_1.vol_ext, (5, 6, 7))
     assert_equals(field_1.shape, (5, 6, 7))
     assert_equals(field_1.dim, 3)
@@ -319,7 +319,6 @@ def test_to_affine_fake_input():
 
 
 ### Test Inter-class methods ###
-# TODO test to_image(self) once implemented!
 
 
 ### Test Jacobian-methods for fields are in the module test_field_jacobian_computation ###
@@ -490,14 +489,12 @@ def test_generate_id_field_3d_1_time_points():
 
     slice_m = np.array([[range(16)] * 16]).reshape([16, 16])
 
-    # TODO: see the swap in the coordinates. Debug in accordance to that one!
-
     for i in range(10):
-        assert_array_equal(id_field.field[i, ..., 0].reshape([16, 16]), slice_m.T)
-        assert_array_equal(id_field.field[:, i, ..., 1].reshape([16, 16]), slice_m)
-        assert_array_equal(id_field.field[:, :, i, ..., 2].reshape([16, 16]), slice_m.T)
+        assert_array_equal(id_field.field[i, ..., 0].reshape([16, 16]), np.array([i] * 16 * 16).reshape(16, 16))
+        assert_array_equal(id_field.field[:, i, ..., 1].reshape([16, 16]), np.array([i] * 16 * 16).reshape(16, 16))
+        assert_array_equal(id_field.field[:, :, i, ..., 2].reshape([16, 16]), np.array([i] * 16 * 16).reshape(16, 16))
 
-test_generate_id_field_3d_1_time_points()
+        assert_array_equal(id_field.field[:, i, ..., 2].reshape([16, 16]), slice_m)
 
 
 def test_generate_id_field_3d_5_time_points():
@@ -510,9 +507,9 @@ def test_generate_id_field_3d_5_time_points():
 
     for i in range(10):
         t = np.random.choice(range(5))
-        assert_array_equal(id_field.field[i, ..., t, 0].reshape([16, 16]), slice_m.T)
-        assert_array_equal(id_field.field[:, i, :, t, 1].reshape([16, 16]), slice_m)
-        assert_array_equal(id_field.field[:, :, i, t, 2].reshape([16, 16]), slice_m.T)
+        assert_array_equal(id_field.field[i, ..., t, 0].reshape([16, 16]), np.array([i] * 16 * 16).reshape(16, 16))
+        assert_array_equal(id_field.field[:, i, :, t, 1].reshape([16, 16]), np.array([i] * 16 * 16).reshape(16, 16))
+        assert_array_equal(id_field.field[:, :, i, t, 2].reshape([16, 16]), np.array([i] * 16 * 16).reshape(16, 16))
 
 
 def test_generate_id_field_3d_wrong_input_shape():

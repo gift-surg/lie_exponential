@@ -236,6 +236,7 @@ def test_2_random_vector_fields_svf(get_figures=False):
                               svf_zeros.field[passe_partout:-passe_partout, passe_partout:-passe_partout, 0, 0, :],
                               decimal=dec)
     '''
+    assert True
     # sfv_0 is provided in Lagrangian coordinates!
     if get_figures:
         see_field(svf_f, fig_tag=51, input_color='b')
@@ -289,9 +290,7 @@ def visual_assessment_comparison_old_with_new_code_for_svf(get_figures=False):
 
 
 def test_2_random_vector_fields_as_deformations(get_figures=False):
-    """
-    Of course the composition is not the identity since we are working in the tangent space.
-    """
+
     dec = 1
     passe_partout = 3
 
@@ -305,7 +304,7 @@ def test_2_random_vector_fields_as_deformations(get_figures=False):
                                              sigma_gaussian_filter=sigma_gaussian_filter)
 
     sdisp_0 = svf_0.exponential(algorithm='ss')
-    sdisp_0_inv = (-1*svf_0).exponential(algorithm='ss')
+    sdisp_0_inv = (-1 * svf_0).exponential(algorithm='ss')
 
     f_o_f_inv = SVF.composition(sdisp_0, sdisp_0_inv)
     f_inv_o_f = SVF.composition(sdisp_0_inv, sdisp_0)
@@ -332,6 +331,7 @@ def test_2_random_vector_fields_as_deformations(get_figures=False):
         see_field(f_inv_o_f, fig_tag=63, input_color='g', title_input='composition (f^(-1) o f) in green')
 
     plt.show()
+
 
 '''
 test_2_easy_vector_fields(get_figures=True)

@@ -289,14 +289,14 @@ class Image(Field):
         nib.save(self.nib_image, name)
 
     @classmethod
-    def from_array_with_header(cls, field, header, affine=np.eye(4)):
+    def from_array_with_header(cls, array, header, affine=np.eye(4)):
         """
         Create Image (or children) from data and header.
         Header is directly inserted by the user.
         :param field: The field to generate the image.
         :param header: The image header type Nifty1Header.
         """
-        image = nib.Nifti1Image(field, header=header, affine=affine)
+        image = nib.Nifti1Image(array, header=header, affine=affine)
         return cls(image)
 
     @classmethod
@@ -328,9 +328,9 @@ class Image(Field):
         :param field: input field from which we want to compute the image.
         """
         if header is None:
-            image = nib.Nifti1Image(field, affine=affine)
+            image = nib.Nifti1Image(field.field, affine=affine)
         else:
-            image = nib.Nifti1Image(field, affine=affine, header=header)
+            image = nib.Nifti1Image(field.field, affine=affine, header=header)
         return cls(image)
 
     ### Normed space methods: ###

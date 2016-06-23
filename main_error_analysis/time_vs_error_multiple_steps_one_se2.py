@@ -32,7 +32,7 @@ if __name__ == "__main__":
 
     compute = True
     verbose = True
-    save_external = True
+    save_external = False
     plot_results = True
 
     #######################
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
         # Parameters SVF
 
-        x_1, y_1, z_1 = 10, 10, 1
+        x_1, y_1, z_1 = 60, 60, 60
 
         if z_1 == 1:
             domain = (x_1, y_1)

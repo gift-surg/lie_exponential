@@ -562,10 +562,12 @@ test_jacobian_toy_field_3d_1()
 test_jacobian_toy_field_3d_2()
 
 
-# TODO: test jacobian determinant method! Refactor the following tests!
+#
 
 '''
 ### Jacobian determinant tests ###
+
+For additinoal tests refactor the following:
 
 
 def test_jacobian_determinant_toy_field_2d_1():

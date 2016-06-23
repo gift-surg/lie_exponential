@@ -120,9 +120,9 @@ class SVF(Image):
         left  = copy.deepcopy(left_input)
         right = copy.deepcopy(right_input)
 
-        result_field = matrix_vector_field_product(SDISP.compute_jacobian(right).field, left.field)
+        result_array = matrix_vector_field_product(SDISP.compute_jacobian(right).field, left.field)
 
-        return SVF.from_field(result_field)
+        return SVF.from_array(result_array)
 
     @staticmethod
     def iterative_jacobian_product(v, n):
@@ -191,7 +191,7 @@ class SVF(Image):
         :param : It returns a displacement, element of the class disp.
         """
 
-        v = copy.deepcopy(SVF.from_field(self.field, header=self.nib_image.get_header()))
+        v = copy.deepcopy(SVF.from_array_with_header(self.field, header=self.nib_image.get_header()))
         phi = copy.deepcopy(SDISP.generate_zero(shape=self.shape, header=self.nib_image.get_header()))
 
         ''' automatic computation of the optimal number of steps: '''

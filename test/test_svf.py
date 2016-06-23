@@ -10,8 +10,8 @@ The Class SVF methods are divided in 5 blocks:
 import numpy as np
 from sympy.core.cache import clear_cache
 
-from nose.tools import assert_equals, assert_raises, assert_almost_equals
-from numpy.testing import assert_array_equal, assert_array_almost_equal, assert_almost_equal
+from nose.tools import assert_equals
+from numpy.testing import assert_array_equal
 
 from transformations.s_vf import SVF
 from utils.fields import Field

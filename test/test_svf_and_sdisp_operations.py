@@ -1,16 +1,10 @@
 import numpy as np
-from sympy.core.cache import clear_cache
-import nibabel as nib
-import os
 import copy
 
-from nose.tools import assert_equals, assert_raises, assert_almost_equals
-from numpy.testing import assert_array_equal, assert_array_almost_equal, assert_almost_equal
+from numpy.testing import assert_array_equal
 
 from transformations.s_vf import SVF
 from transformations.s_disp import SDISP
-from utils.fields import Field
-from utils.image import Image
 
 
 def test_sum_of_two_svf(verbose=True):
@@ -227,14 +221,5 @@ def test_non_destructivity_of_the_operations():
     svf_0_back_up = copy.deepcopy(svf_0)
     svf_1_back_up = copy.deepcopy(svf_1)
 
-    svf_sum     = svf_0 + svf_1
-    svf_diff    = svf_0 - svf_1
-    svf_0_inv   = -1*svf_0
-    svf_1_alpha = 0.5 * svf_1
-
     assert_array_equal(svf_0.field, svf_0_back_up.field)
     assert_array_equal(svf_1.field, svf_1_back_up.field)
-
-# test_sum_of_two_svf()
-test_sum_of_two_sdisp()
-# test_non_destructivity_of_the_operations()
