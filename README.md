@@ -1,5 +1,5 @@
 Python 2.7 (.11)
-Libraries: numpy, matplotlib, copy, os, tabulate, sympy, pickle, nibabel, scipy, timeit, math, warnings
+Libraries: numpy, matplotlib, copy, os, tabulate, sympy, pickle, nibabel, scipy, timeit, math, warnings.
 
 
 # Log-Euclidean Framework
@@ -15,7 +15,7 @@ Diffeomorphisms considered are the one defined over a compact subset of R^2 or R
 
 Please do consider the references:
 
-1. Rudolf Schmidt, Infinite-Dimensional Lie Groups and Algebras in Mathematical physics.
+1. Rudolf Schmidt, "Infinite-Dimensional Lie Groups and Algebras in Mathematical physics."
 2. Milnor "Remarks on infinite dimensional Lie Group" 1984.
 3. Milnor "On infinite dimensional Lie groups" IAP preprint 1982.
 4. Holm, Schmah, Stoica "Geometric Mechanics and Symmetry: from finite to infinite dimensions".
@@ -93,24 +93,27 @@ contain the methods that load the data saved by the methods in main_error_analys
 # Where to start
 
 
-Create a folder called results_folder, and link it in the path_manager under utils, substituting all the paths you find in this module. Path manager is used as well to link the data-sets used in the real case experiments to the code.
+Create the folder "results_folder", and link it to the code inserting the path in the moduel path_manager under the folder utils. Substitute all the paths you find in this module. The module path_manager is used as well to link the data-sets used in the real case experiments to the code.
 
-Once data are linked correctly, and the libraries are downloaded, you can run all the methods in the folder 
+Once data are linked correctly, and the python libraries are downloaded, you can run all the methods in the folder 
 main_error_analysis, selecting the methods parameters in the aaa_general_controller.py. 
 If no real svf from longitudinal studies are available, all the methods that not ends in *_real.py
 are likely to work anyway and to produce the results with sinthetic data.
 
 Note (to reproduce the main results proposed in the WBIR paper): results proposed in the paper obtained 
 from the manually segmented Neuromorphometric data-set have been obtained from the UCL cluster and are not publicly available. 
-Related computations have been performed on the cluster as well, and results are not reproducible with this code. 
-You can find nontheless the approximated exponential integrator implemented in nifty-Reg in the last dev version of the
-software, and you are invited to apply the methods using other data-sets.
+Related computations have been performed on the cluster as well, and results with this data set are not reproducible with this code. 
+You can find nontheless the approximated exponential integrator implemented in nifty-Reg
+
+    https://sourceforge.net/projects/niftyreg/
+
+in the last dev version of the software, and you are invited to apply the methods using other data-sets.
 
 Core method is SVF.exponential in the folder transformations/s_vf
 
 ## Nosetests
 
-Run nosetests --exe to see if everything works. No errors are raised on Mac OS X with the provided libraries.
+Run nosetests --exe to see if everything works. Code is tested on Mac OS X with the provided libraries. Please do contact me if you encounter any problem.
 
 
 ## Programming philosophy: warning the users
@@ -118,7 +121,7 @@ Run nosetests --exe to see if everything works. No errors are raised on Mac OS X
 It is worth remember that programming is always the choice of the single through the multiple, and the variety of options 
 and possibilities it is not possible to include everything, nor to reach any ideal 
 "best possible code".
-Albeit there are some principles that are a consequence of the need and the final aim.
+Albeit, there are some principles that are a consequence of the need and the final aim.
  
 This code is to be intended as a work in progress. It is not meant to be a final product, nor to be as elegant or as 
 exhaustive as possible.
