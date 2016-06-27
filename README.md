@@ -79,16 +79,14 @@ truth to validate the numerical methods implemented for their computation of the
 
 ## WBIR 2016
 
-The code has been used to propose some results obtained from the application of Exponential Integrators embedded in the
-Euler and in the Scaling and Squaring integration framework.
+The code has been used to produce the results proposed in the proceedings of the IEEE Conference on Computer Vision and Pattern Recognition Workshops 2016:
 
-Please do consider the references:
+http://www.cv-foundation.org/openaccess/content_cvpr_2016_workshops/w15/html/Ferraris_Accurate_Small_Deformation_CVPR_2016_paper.html
 
-1. Arsigny et al. "A fast an log-euclidean polyaffine framework for locally linear registration"
-2. Arsigny et al. "A log-euclidean framework for statistics on diffeomorphisms"
-3. Yng, Candes "The phase flow method" 
 
-Folder 
+Please do consider the proposed references for additional informations.
+
+The folder 
 
     main_error_analysis
 
@@ -99,7 +97,7 @@ Folder
     main_wbir
 
 loads the data saved by the methods contained in the folder main_error_analysis and used to produce graphs proposed in 
-the paper.
+the proceedings.
  
  
 # Where to start
