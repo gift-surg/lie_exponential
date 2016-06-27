@@ -17,5 +17,3 @@ print niftyReg_path
 path_reg_tool = os.path.join(niftyReg_path, 'reg_aladin')
 
 os.system(path_reg_tool + ' -h')
-
-
