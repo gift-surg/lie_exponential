@@ -129,4 +129,18 @@ It was written having in mind to create the shortest path toward the aim, mining
 the aim itself and the route toward him, that new needs and new information acquired during the development of a 
 research usually generate.
  
-Any question, ontribution, comment and improvement from you is very welcome.
+Any question, contribution, comment and improvement from you is very welcome.
+
+
+## Funders:
+
+Sebastiano Ferraris is supported by the EPSRC-funded UCL Centre for Doctoral Training in Medical Imaging (EP/L016478/1) 
+and Doctoral Training Grant (EP/M506448/1). Pankaj Daga was funded through an Innovative Engineering for Health award 
+by Wellcome Trust [WT101957]; Engineering and Physical Sciences Research Council (EPSRC) [NS/A000027/1]. Marc Modat is 
+supported by the UCL Leonard Wolfson Experimental Neurology Centre. Tom Vecauteren is supported by an Innovative 
+Engineering for Health award by the Wellcome Trust [WT101957]; Engineering and Physical Sciences Research Council 
+(EPSRC) [NS/A000027/1].
+
+## Website
+
+http://www.gift-surg.ac.uk/

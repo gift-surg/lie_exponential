@@ -26,7 +26,7 @@ path_t1_nifti = jph(path_to_folder, 'time1.nii')
 
 path_to_svf = jph(path_to_folder, 'disp.nii.gz')
 
-path_to_tmp = '/Users/sebastiano/Desktop/tmp4'
+path_to_tmp = '/Users/sebastiano/Desktop/tmp'
 
 ### import source image:
 
@@ -125,7 +125,7 @@ for s in range(len(coeff_steps)):
     plt.setp(ax.get_xticklabels(), visible=False)
     plt.setp(ax.get_yticklabels(), visible=False)
 
-    plt.savefig(jph(path_to_tmp, 'time_' + str(s) + '.png'))
+    #plt.savefig(jph(path_to_tmp, 'time_' + str(s) + '.png'))
 
     # add the field
     #see_field(svf_reduced, fig_tag=s+10)

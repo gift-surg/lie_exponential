@@ -203,12 +203,12 @@ if __name__ == "__main__":
 
         if save_for_sharing:
 
-            np.save(os.path.join(path_to_sharing_folder, 'ic_errors_real'+file_suffix), errors)
+            np.save(os.path.join(path_to_sharing_folder, 'ic_errors_real' + file_suffix), errors)
 
-            with open(os.path.join(path_to_sharing_folder, 'ic_parameters_real'+file_suffix), 'wb') as f:
+            with open(os.path.join(path_to_sharing_folder, 'ic_parameters_real' + file_suffix), 'wb') as f:
                 pickle.dump(parameters, f)
 
-            with open(os.path.join(path_to_sharing_folder, 'ic_methods_table_real'+file_suffix), 'wb') as f:
+            with open(os.path.join(path_to_sharing_folder, 'ic_methods_table_real' + file_suffix), 'wb') as f:
                 pickle.dump(methods, f)
 
     else:

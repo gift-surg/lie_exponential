@@ -28,7 +28,7 @@ if __name__ == "__main__":
     domain = (x_1, y_1)
     shape = list(domain) + [1, 1, 2]
 
-    random_image = True  # random or se2
+    random_image = False  # random or se2
 
     # generate the grid and copy as target
     grid_array = grid_generator(x_size=x_1,
@@ -48,15 +48,15 @@ if __name__ == "__main__":
         sigma_init = 6
         sigma_gaussian_filter = 2
 
-        svf_im0   = SVF.generate_random_smooth(shape=shape,
-                                                 sigma=sigma_init,
-                                                 sigma_gaussian_filter=sigma_gaussian_filter)
+        svf_im0 = SVF.generate_random_smooth(shape=shape,
+                                             sigma=sigma_init,
+                                             sigma_gaussian_filter=sigma_gaussian_filter)
 
     else:
 
         x_c = np.floor(x_1/2)
         y_c = np.floor(y_1/2)
-        theta = np.pi
+        theta = np.pi/50
 
         tx   = (1 - np.cos(theta)) * x_c + np.sin(theta) * y_c
         ty   = -np.sin(theta) * x_c + (1 - np.cos(theta)) * y_c

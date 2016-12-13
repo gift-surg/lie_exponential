@@ -61,6 +61,8 @@ def test_2_easy_vector_fields(get_figures=False):
 
     plt.show()
 
+test_2_easy_vector_fields(True)
+
 
 def test_2_less_easy_vector_fields(get_figures=False):
 

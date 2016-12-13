@@ -1,6 +1,6 @@
 from scipy import ndimage
-
-from image import *
+import numpy as np
+#from image import *
 from helper import generate_displacement_from_deformation, generate_position_from_displacement
 
 
