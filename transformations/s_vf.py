@@ -9,7 +9,7 @@ from scipy.integrate import ode
 from utils.image import Image
 from utils.aux_functions import matrix_vector_field_product, matrix_fields_product_iterative
 
-from transformations.s_disp import SDISP
+from visualizer.fields_at_the_window import see_field
 
 
 class SVF(Image):

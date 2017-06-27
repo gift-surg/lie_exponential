@@ -37,7 +37,7 @@ sdisp_ss      = svf_0.exponential(algorithm='ss',        s_i_o=spline_interpolat
 sdisp_ss_pa   = svf_0.exponential(algorithm='gss_rk4',   s_i_o=spline_interpolation_order)
 sdisp_euler   = svf_0.exponential(algorithm='euler',     s_i_o=spline_interpolation_order)
 sdisp_mid_p   = svf_0.exponential(algorithm='midpoint',  s_i_o=spline_interpolation_order)
-sdisp_series  = svf_0.exponential(algorithm='series',    s_i_o=spline_interpolation_order)
+#sdisp_series  = svf_0.exponential(algorithm='series',    s_i_o=spline_interpolation_order)
 sdisp_heun    = svf_0.exponential(algorithm='heun',      s_i_o=spline_interpolation_order)
 sdisp_heun_m  = svf_0.exponential(algorithm='heun_mod',  s_i_o=spline_interpolation_order)
 sdisp_rk4     = svf_0.exponential(algorithm='rk4',       s_i_o=spline_interpolation_order)
@@ -62,7 +62,7 @@ print '|ss - disp|           = ' + str((sdisp_ss - sdisp_0).norm(passe_partout_s
 print '|ss_pa - disp|        = ' + str((sdisp_ss_pa - sdisp_0).norm(passe_partout_size=passepartout))
 print '|euler - disp|        = ' + str((sdisp_euler - sdisp_0).norm(passe_partout_size=passepartout))
 print '|midpoint - disp|     = ' + str((sdisp_mid_p - sdisp_0).norm(passe_partout_size=passepartout))
-print '|sdisp_series - disp| = ' + str((sdisp_series - sdisp_0).norm(passe_partout_size=passepartout))
+#print '|sdisp_series - disp| = ' + str((sdisp_series - sdisp_0).norm(passe_partout_size=passepartout))
 print '|heun - disp|         = ' + str((sdisp_heun - sdisp_0).norm(passe_partout_size=passepartout))
 print '|heun_mod - disp|     = ' + str((sdisp_heun_m - sdisp_0).norm(passe_partout_size=passepartout))
 print '|rk4 - disp|          = ' + str((sdisp_rk4 - sdisp_0).norm(passe_partout_size=passepartout))
@@ -74,7 +74,8 @@ print
 ### Plot:
 
 fields_list = [svf_0, sdisp_0, sdisp_ss,   sdisp_ss_pa,   sdisp_euler,
-               sdisp_mid_p, sdisp_series, sdisp_heun, sdisp_heun_m,  sdisp_rk4]
+               sdisp_mid_p, #sdisp_series, 
+               sdisp_heun, sdisp_heun_m,  sdisp_rk4]
 title_input = ['svf_0', 'sdisp_0', 'sdisp_ss', 'sdisp_ss_pa', 'sdisp_euler', 'disp_mid_p', 'disp_euler_m', 'disp_rk4']
 subtract_id = [False, False] + ([False, ] * (len(fields_list) - 2))
 input_color = ['r', 'b', 'g', 'c', 'm', 'k', 'b', 'g', 'c']
@@ -141,5 +142,3 @@ if 0:
 
 
 plt.show()
-
-

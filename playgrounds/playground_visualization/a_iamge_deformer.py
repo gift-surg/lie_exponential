@@ -27,7 +27,7 @@ from visualizer.fields_at_the_window import triptych_image_quiver_image
 
 # Import SVF:
 
-path_to_folder = '/Users/sebastiano/Documents/UCL/a_data/z_for_presentations/single_sub'
+path_to_folder = '/Users/sebastiano/a_data/z_for_presentations/single_sub'
 path_t0_nifti = jph(path_to_folder, 'time0.nii')
 path_t1_nifti = jph(path_to_folder, 'time1.nii')
 
@@ -118,5 +118,3 @@ see_field(0.01 * svf_1, fig_tag=102)
 '''
 
 # import initial image
-
-

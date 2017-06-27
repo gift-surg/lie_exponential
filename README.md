@@ -116,21 +116,6 @@ Core method is SVF.exponential in the folder transformations/s_vf
 
 Run nosetests --exe to see if everything works. Code is tested on Mac OS X with the provided libraries. Please do contact me if you encounter any problem.
 
-## Programming philosophy: warning the users
-
-It is worth remember that programming is always the choice of the single through the multiple, and the variety of options 
-and possibilities it is not possible to include everything, nor to reach any ideal 
-"best possible code".
-Albeit, there are some principles that are a consequence of the need and the final aim.
- 
-This code is to be intended as a work in progress. It is not meant to be a final product, nor to be as elegant or as 
-exhaustive as possible.
-It was written having in mind to create the shortest path toward the aim, mining any possible future change of 
-the aim itself and the route toward him, that new needs and new information acquired during the development of a 
-research usually generate.
- 
-Any question, contribution, comment and improvement from you is very welcome.
-
 
 ## Funders:
 
