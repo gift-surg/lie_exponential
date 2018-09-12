@@ -216,7 +216,7 @@ class Image(Field):
         Composition between vector fields. Based on DisplacementFieldComposer()
         :param cls: s_disp object.
         :param s_i_o: spline interpolation order
-        :return: external composition with displacement fields.
+        :return: external composition with displacement fields.  zzz
         """
         d = np.zeros(right_def.field.shape)
         result = cls.from_array_with_header(d, header=right_def.nib_image.get_header())

@@ -4,12 +4,12 @@ from utils.path_manager import niftyReg_path
 """
 Notes on how to OBTAIN SVFs from NiftyReg
 
-SVF are obtained from NiftyReg as follows reg_f3d with command -vel return the corresponding cpp grid as the
+SVF are obtained from NiftyReg as follows reg_f3d with command -vel returns the corresponding cpp grid as the
 control point grid we are interested in.
 The dense vector field that corresponds to the given gpp grid is then provided with -flow and it
 is obtained in 'deformation coordinates' (Eulerian coordinate system).
 To have it in displacement coordinate system (Lagrangian coordinate system) for our elaboration we need to
-subtract them the identity with python (not with - disp in niftyReg, otherwise it will be exponentiated again).
+subtract the identity with python (not with - disp in niftyReg, otherwise it will be exponentiated again).
 """
 
 

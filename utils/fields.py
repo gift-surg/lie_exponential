@@ -589,7 +589,7 @@ class Field(object):
         if as_float:
             v_at_point = (float(grid_x), float(grid_y))
         else:
-            v_at_point =  (grid_x, grid_y)
+            v_at_point = (grid_x, grid_y)
         return v_at_point
 
     def one_point_interpolation_rdf(self, point, epsilon=50, as_float=True):
