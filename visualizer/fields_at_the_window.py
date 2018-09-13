@@ -2,7 +2,7 @@ import numpy as np
 import copy
 import matplotlib.pyplot as plt
 
-from utils.fields import Field
+from z_utils.fields import Field
 
 
 def see_field(input_obj,

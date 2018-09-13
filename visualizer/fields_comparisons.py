@@ -5,7 +5,7 @@ import numpy as np
 import copy
 import matplotlib.pyplot as plt
 
-from utils.fields import Field
+from z_utils.fields import Field
 
 
 def see_2_fields_separate_and_overlay(input_obj_0, input_obj_1,
