@@ -188,16 +188,13 @@ if __name__ == "__main__":
 
         if save_for_sharing:
 
-            path_to_sharing_folder = jph(pfo_errors_times_results, 'sharing_folder')
-            np.save(jph(path_to_sharing_folder, 'step_relative_errors_gauss'), step_errors)
-            np.save(jph(path_to_sharing_folder, 'step_relative_exp_methods_param_gauss'), methods_t_s)
+            np.save(jph(pfo_notes_sharing, 'step_relative_errors_gauss'), step_errors)
+            np.save(jph(pfo_notes_sharing, 'step_relative_exp_methods_param_gauss'), methods_t_s)
 
-            with open(jph(path_to_sharing_folder,
-                                   'step_relative_errors_transformation_parameters_gauss'), 'wb') as f:
+            with open(jph(pfo_notes_sharing, 'step_relative_errors_transformation_parameters_gauss'), 'wb') as f:
                 pickle.dump(parameters, f)
 
-            with open(jph(path_to_sharing_folder,
-                                   'step_relative_errors_numerical_method_table_gauss'), 'wb') as f:
+            with open(jph(pfo_notes_sharing, 'step_relative_errors_numerical_method_table_gauss'), 'wb') as f:
                 pickle.dump(methods, f)
 
         print

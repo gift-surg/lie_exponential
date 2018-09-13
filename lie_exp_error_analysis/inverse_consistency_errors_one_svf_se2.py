@@ -1,14 +1,21 @@
 import copy
 import os
 import pickle
+from os.path import join as jph
 
 import matplotlib.pyplot as plt
 import numpy as np
 from sympy.core.cache import clear_cache
 from tabulate import tabulate
 
-from controller import methods_t_s, pfo_results, pfo_notes_figures, \
-    pfo_notes_sharing
+from VECtorsToolkit.tools.transformations import se2
+from VECtorsToolkit.tools.fields.generate_vf import generate_from_matrix
+from VECtorsToolkit.tools.local_operations.lie_exponential import lie_exponential_scipy, lie_exponential
+from VECtorsToolkit.tools.fields.queries import vf_norm
+from VECtorsToolkit.tools.fields.composition import lagrangian_dot_lagrangian
+
+from controller import methods_t_s
+from path_manager import pfo_results, pfo_notes_figures, pfo_notes_sharing
 from visualizer.graphs_and_stats_new import plot_custom_step_versus_error_single
 
 """
@@ -21,52 +28,47 @@ if __name__ == "__main__":
     clear_cache()
 
     ##################
-    ### Controller ###
+    #   Controller   #
     ##################
 
-    compute = True
-    verbose = True
-    save_external = False
-    plot_results = True
+    compute       = True
+    verbose       = True
+    save_external = True
+    plot_results  = True
 
     #######################
-    ### Path management ###
+    #   Path management   #
     #######################
 
     prefix_fn = 'exp_comparing_inverse_consistency_error'
     kind   = 'SE2'
     number = 'single'
-    file_suffix  = '_' + str(1)
+    tag    = '_' + str(1)
 
-    filename_figure_output              = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_figure'
-    filename_csv_table_errors_output    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_errors'
-    filename_csv_table_comp_time_output = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_cp_time'
-    filename_array_errors_output        = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_array_errors'
-    filename_transformation_parameters  = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_parameters'
-    filename_field                      = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_field'
-    filename_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
+    fin_figure_output              = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_figure'
+    fin_csv_table_errors_output    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_errors'
+    fin_csv_table_comp_time_output = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_cp_time'
+    fin_array_errors_output        = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_array_errors'
+    fin_transformation_parameters  = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_parameters'
+    fin_field                      = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_field'
+    fin_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
 
     # paths to results in internal to the project
-    path_to_results_folder = os.path.join(pfo_results, 'errors_times_results')
-    fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                filename_array_errors_output + file_suffix + '.npy')
-    fullpath_transformation_parameters = os.path.join(path_to_results_folder,
-                                                      filename_transformation_parameters + file_suffix)
-    fullpath_field = os.path.join(path_to_results_folder,
-                                  filename_field + file_suffix + '.npy')
-    fullpath_numerical_method_table = os.path.join(path_to_results_folder,
-                                                   filename_numerical_methods_table + file_suffix)
-
-    # path to results external to the project:
-    fullpath_figure_output  = os.path.join(pfo_notes_figures,
-                                           filename_figure_output + file_suffix + '.pdf')
-    fullpath_csv_table_errors_output = os.path.join(pfo_notes_sharing,
-                                                    filename_csv_table_errors_output + '.csv')
-    fullpath_csv_table_comp_time_output = os.path.join(pfo_notes_sharing,
-                                                       filename_csv_table_comp_time_output + '.csv')
+    pfo_errors_times_results =jph(pfo_results, 'errors_times_results')
+    
+    os.system('mkdir -p {}'.format(pfo_errors_times_results))
+    print("\nPath to results folder {}\n".format(pfo_errors_times_results))
+    
+    pfi_array_errors_output        = jph(pfo_errors_times_results, fin_array_errors_output + tag + '.npy')
+    pfi_transformation_parameters  = jph(pfo_errors_times_results, fin_transformation_parameters + tag + '.pickle')
+    pfi_field                      = jph(pfo_errors_times_results, fin_field + tag + '.npy')
+    pfi_numerical_method_table     = jph(pfo_errors_times_results, fin_numerical_methods_table + tag + '.pickle')
+    pfi_figure_output              = jph(pfo_notes_figures, fin_figure_output + tag + '.pdf')
+    pfi_csv_table_errors_output    = jph(pfo_notes_sharing, fin_csv_table_errors_output + '.csv')
+    pfi_csv_table_comp_time_output = jph(pfo_notes_sharing, fin_csv_table_comp_time_output + '.csv')
 
     ####################
-    ### Computations ###
+    #   Computations   #
     ####################
 
     if compute:  # or compute or load
@@ -77,14 +79,12 @@ if __name__ == "__main__":
         x_1, y_1, z_1 = 20, 20, 10
 
         if z_1 == 1:
-            domain = (x_1, y_1)
-            shape = list(domain) + [1, 1, 2]
+            omega = (x_1, y_1)
         else:
-            domain = (x_1, y_1, z_1)
-            shape = list(domain) + [1, 3]
+            omega = (x_1, y_1, z_1)
 
-        x_c = np.floor(x_1 / 2)
-        y_c = np.floor(y_1 / 2)
+        x_c   = np.floor(x_1 / 2)
+        y_c   = np.floor(y_1 / 2)
         theta = np.pi / 8
 
         tx   = (1 - np.cos(theta)) * x_c + np.sin(theta) * y_c
@@ -117,46 +117,44 @@ if __name__ == "__main__":
         errors = np.zeros([num_method_considered, len(list_steps)])
 
         # Matrix of transformation (se2 group and corresponding log)
-        m_0 = se2_g.se2_g(theta, tx, ty)
-        dm_0 = se2_g.log(m_0)
+        m_0  = se2.Se2G(theta, tx, ty)
+        dm_0 = se2.se2g_log(m_0)
 
-        svf_0   = SVF.generate_from_matrix(domain, dm_0.get_matrix, affine=np.eye(4))
-        svf_0_inv   = -1 * svf_0
-        svf_as_array = copy.deepcopy(svf_0.field)
+        svf_0        = generate_from_matrix(omega, dm_0.get_matrix, t=1, structure='algebra')
+        svf_0_inv    = -1 * svf_0
 
         # Generate displacement ground truth (for sanity check)
-        sdisp_0 = SDISP.generate_from_matrix(domain, m_0.get_matrix - np.eye(3), affine=np.eye(4))
-        sdisp_0_inv = SDISP.generate_from_matrix(domain, np.linalg.inv(m_0.get_matrix) - np.eye(3), affine=np.eye(4))
+        sdisp_0     = generate_from_matrix(omega, m_0.get_matrix, t=1, structure='group')
+        sdisp_0_inv = generate_from_matrix(omega, np.linalg.inv(m_0.get_matrix), t=1, structure='group')
 
-        # Sanity check: composition of the ground truth, must be very close to the identity field.
-        sdisp_o_sdisp_inv_ground = SDISP.composition(sdisp_0, sdisp_0_inv, s_i_o=s_i_o)
-        sdisp_inv_o_sdisp_ground = SDISP.composition(sdisp_0_inv, sdisp_0, s_i_o=s_i_o)
-
-        zero_disp = SDISP.generate_zero(shape)
-        np.testing.assert_array_almost_equal(sdisp_o_sdisp_inv_ground.field, zero_disp.field, decimal=0)
-        np.testing.assert_array_almost_equal(sdisp_inv_o_sdisp_ground.field, zero_disp.field, decimal=0)
+        # # Sanity check: composition of the ground truth, must be very close to the identity field.
+        # sdisp_o_sdisp_inv_ground = lagrangian_dot_lagrangian(sdisp_0, sdisp_0_inv, s_i_o=s_i_o)
+        # sdisp_inv_o_sdisp_ground = lagrangian_dot_lagrangian(sdisp_0_inv, sdisp_0, s_i_o=s_i_o)
+        #
+        # np.testing.assert_array_almost_equal(sdisp_o_sdisp_inv_ground, np.zeros_like(sdisp_o_sdisp_inv_ground),
+        #                                      decimal=0)
+        # np.testing.assert_array_almost_equal(sdisp_inv_o_sdisp_ground, np.zeros_like(sdisp_inv_o_sdisp_ground),
+        #                                      decimal=0)
 
         for step_index, step_num in enumerate(list_steps):
             for met in range(num_method_considered):
                 if names_method_considered[met] == 'vode' or names_method_considered[met] == 'lsoda':
-                    disp_computed = svf_0.exponential_scipy(integrator=names_method_considered[met],
-                                                            max_steps=step_num)
+                    disp_computed = lie_exponential_scipy(svf_0, integrator=names_method_considered[met],
+                                                          max_steps=step_num)
 
-                    disp_computed_inv = svf_0_inv.exponential_scipy(integrator=names_method_considered[met],
-                                                                    max_steps=step_num)
+                    disp_computed_inv = lie_exponential_scipy(svf_0_inv, integrator=names_method_considered[met],
+                                                              max_steps=step_num)
                 else:
-                    disp_computed = svf_0.exponential(algorithm=names_method_considered[met],
-                                                      s_i_o=s_i_o,
-                                                      input_num_steps=step_num)
-                    disp_computed_inv = svf_0_inv.exponential(algorithm=names_method_considered[met],
-                                                              s_i_o=s_i_o,
-                                                              input_num_steps=step_num)
+                    disp_computed = lie_exponential(svf_0, algorithm=names_method_considered[met], s_i_o=s_i_o,
+                                                    input_num_steps=step_num)
+                    disp_computed_inv = lie_exponential(svf_0_inv, algorithm=names_method_considered[met], s_i_o=s_i_o,
+                                                        input_num_steps=step_num)
                 # compute error:
-                sdisp_o_sdisp_inv = SDISP.composition(disp_computed, disp_computed_inv, s_i_o=s_i_o)
-                sdisp_inv_o_sdisp = SDISP.composition(disp_computed_inv, disp_computed, s_i_o=s_i_o)
+                sdisp_o_sdisp_inv = lagrangian_dot_lagrangian(disp_computed, disp_computed_inv, s_i_o=s_i_o)
+                sdisp_inv_o_sdisp = lagrangian_dot_lagrangian(disp_computed_inv, disp_computed, s_i_o=s_i_o)
 
-                errors[met, step_index] = 0.5 * (sdisp_o_sdisp_inv.norm(passe_partout_size=pp, normalized=True)
-                                          + sdisp_inv_o_sdisp.norm(passe_partout_size=pp, normalized=True))
+                errors[met, step_index] = 0.5 * (vf_norm(sdisp_o_sdisp_inv, passe_partout_size=pp, normalized=True)
+                                                 + vf_norm(sdisp_inv_o_sdisp, passe_partout_size=pp, normalized=True))
 
             # tabulate the result:
             print 'Step ' + str(step_num) + ' computed: phase  ' + str(step_index + 1) + \
@@ -172,13 +170,13 @@ if __name__ == "__main__":
 
         ### Save data to folder ###
 
-        np.save(fullpath_array_errors_output, errors)
-        np.save(fullpath_field, svf_as_array)
+        np.save(pfi_array_errors_output, errors)
+        np.save(pfi_field, svf_0)
 
-        with open(fullpath_transformation_parameters, 'wb') as f:
+        with open(pfi_transformation_parameters, 'wb') as f:
             pickle.dump(parameters, f)
 
-        with open(fullpath_numerical_method_table, 'wb') as f:
+        with open(pfi_numerical_method_table, 'wb') as f:
             pickle.dump(methods, f)
 
         print
@@ -188,13 +186,13 @@ if __name__ == "__main__":
 
     else:
 
-        errors       = np.load(fullpath_array_errors_output)
-        svf_as_array = np.load(fullpath_field)
+        errors       = np.load(pfi_array_errors_output)
+        svf_as_array = np.load(pfi_field)
 
-        with open(fullpath_transformation_parameters, 'rb') as f:
+        with open(pfi_transformation_parameters, 'rb') as f:
             parameters = pickle.load(f)
 
-        with open(fullpath_numerical_method_table, 'rb') as f:
+        with open(pfi_numerical_method_table, 'rb') as f:
             methods = pickle.load(f)
 
         print
@@ -254,7 +252,7 @@ if __name__ == "__main__":
         plot_custom_step_versus_error_single(list_steps, errors, names_method_considered,
                                              input_parameters=parameters, fig_tag=2, log_scale=True,
                                              additional_vertical_line=None,
-                                             additional_field=svf_as_array,
+                                             additional_field=svf_0,
                                              kind='one_SE2',
                                              input_marker=marker_method_considered,
                                              input_colors=color_methods_considered,

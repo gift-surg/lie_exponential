@@ -1,13 +1,20 @@
 import os
 import pickle
 import time
+from os.path import join as jph
 
 import matplotlib.pyplot as plt
 import numpy as np
 from sympy.core.cache import clear_cache
 from tabulate import tabulate
 
-from controller import methods_t_s, pfo_results, pfo_notes_figures, pfo_notes_sharing
+from VECtorsToolkit.tools.transformations import se2
+from VECtorsToolkit.tools.fields.generate_vf import generate_from_matrix
+from VECtorsToolkit.tools.local_operations.lie_exponential import lie_exponential_scipy, lie_exponential
+from VECtorsToolkit.tools.fields.queries import vf_norm
+
+from controller import methods_t_s
+from path_manager import pfo_results, pfo_notes_figures, pfo_notes_sharing
 from visualizer.graphs_and_stats_new import plot_custom_boxplot, plot_custom_cluster
 
 """
@@ -23,56 +30,49 @@ if __name__ == "__main__":
     clear_cache()
 
     ##################
-    ### Controller ###
+    #   Controller   #
     ##################
 
-    compute = True
-    verbose = True
+    compute       = True
+    verbose       = True
     save_external = True
-    plot_results = True
+    plot_results  = True
 
     #######################
-    ### Path management ###
+    #   Path management   #
     #######################
 
     prefix_fn = 'exp_comparing_errors'
-    kind   = 'SE2'
-    number = 'multiple'
-    file_suffix  = '_' + str(1)
+    kind      = 'SE2'
+    number    = 'multiple'
+    tag       = '_' + str(1)
 
-    filename_figure_output              = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_figure'
-    filename_csv_table_errors_output    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_errors'
-    filename_csv_table_comp_time_output = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_cp_time'
-    filename_array_errors_output        = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_array_errors'
-    filename_array_comp_time_output     = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_array_cp_time'
-    filename_field                      = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_field'
-    filename_transformation_parameters  = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_parameters'
-    filename_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
+    fin_figure_output              = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_figure'
+    fin_csv_table_errors_output    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_errors'
+    fin_csv_table_comp_time_output = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_cp_time'
+    fin_array_errors_output        = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_array_errors'
+    fin_array_comp_time_output     = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_array_cp_time'
+    fin_field                      = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_field'
+    fin_transformation_parameters  = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_parameters'
+    fin_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
 
     # paths to results in internal to the project
-    path_to_results_folder = os.path.join(pfo_results, 'errors_times_results')
+    pfo_errors_times_results = jph(pfo_results, 'errors_times_results')
 
-    fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                filename_array_errors_output + file_suffix + '.npy')
-    fullpath_array_comp_time_output = os.path.join(path_to_results_folder,
-                                                   filename_array_comp_time_output + file_suffix + '.npy')
-    fullpath_field = os.path.join(path_to_results_folder,
-                                  filename_field + file_suffix + '.npy')
-    fullpath_transformation_parameters = os.path.join(path_to_results_folder,
-                                                      filename_transformation_parameters + file_suffix + '.npy')
-    fullpath_numerical_method_table = os.path.join(path_to_results_folder,
-                                                   filename_numerical_methods_table + file_suffix)
+    os.system('mkdir -p {}'.format(pfo_errors_times_results))
+    print("\nPath to results folder {}\n".format(pfo_errors_times_results))
 
-    # path to results external to the project:
-    fullpath_figure_output  = os.path.join(pfo_notes_figures,
-                                           filename_figure_output + file_suffix + '.pdf')
-    fullpath_csv_table_errors_output = os.path.join(pfo_notes_sharing,
-                                                    filename_csv_table_errors_output + '.csv')
-    fullpath_csv_table_comp_time_output = os.path.join(pfo_notes_sharing,
-                                                       filename_csv_table_comp_time_output + '.csv')
+    pfi_array_errors_output        = jph(pfo_errors_times_results, fin_array_errors_output + tag + '.npy')
+    pfi_array_comp_time_output     = jph(pfo_errors_times_results, fin_array_comp_time_output + tag + '.npy')
+    pfi_field                      = jph(pfo_errors_times_results, fin_field + tag + '.npy')
+    pfi_transformation_parameters  = jph(pfo_errors_times_results, fin_transformation_parameters + tag + '.npy')
+    pfi_numerical_method_table     = jph(pfo_errors_times_results, fin_numerical_methods_table + tag)
+    pfi_figure_output              = jph(pfo_notes_figures, fin_figure_output + tag + '.pdf')
+    pfi_csv_table_errors_output    = jph(pfo_notes_sharing, fin_csv_table_errors_output + '.csv')
+    pfi_csv_table_comp_time_output = jph(pfo_notes_sharing, fin_csv_table_comp_time_output + '.csv')
 
     ####################
-    ### Computations ###
+    #   Computations   #
     ####################
 
     if compute:  # or compute or load
@@ -84,27 +84,25 @@ if __name__ == "__main__":
         pp = 2     # passepartout
         s_i_o = 3  # spline interpolation order
 
-        N = 20
+        N = 5
 
         # Parameters SVF:
         x_1, y_1, z_1 = 20, 20, 5
 
         if z_1 == 1:
-            domain = (x_1, y_1)
-            shape = list(domain) + [1, 1, 2]
+            omega = (x_1, y_1)
         else:
-            domain = (x_1, y_1, z_1)
-            shape = list(domain) + [1, 3]
+            omega = (x_1, y_1, z_1)
 
         interval_theta = (- np.pi / 8, np.pi / 8)
-        epsilon = np.pi / 12
-        omega = (12, 13, 7, 13)  # where to locate the center of the random rotation
+        epsilon        = np.pi / 12
+        center         = (12, 13, 7, 13)  # where to locate the center of the random rotation
 
         parameters = [x_1, y_1, z_1,
                       N,                       # number of samples
                       interval_theta[0], interval_theta[1],  # interval of the rotations
-                      omega[0], omega[1],      # interval of the center of the rotation x
-                      omega[2], omega[3]]      # interval of the center of the rotation y
+                      center[0], center[1],      # interval of the center of the rotation x
+                      center[2], center[3]]      # interval of the center of the rotation y
 
         # import methods from external file aaa_general_controller
         methods = methods_t_s
@@ -119,7 +117,7 @@ if __name__ == "__main__":
         markers_methods_considered   = [methods[j][5] for j in range(len(methods)) if methods[j][1] is True]
 
         ###########################
-        ### Model: computations ###
+        #   Model: computations   #
         ###########################
 
         print '---------------------'
@@ -132,31 +130,29 @@ if __name__ == "__main__":
         for s in range(N):  # sample
 
             # generate matrices
-            m_0 = se2_g.randomgen_custom_center(interval_theta=interval_theta,
-                                                omega=omega,
-                                                epsilon_zero_avoidance=epsilon)
-            dm_0 = se2_g.log(m_0)
+            m_0 = se2.se2g_randomgen_custom_center(interval_theta=interval_theta, interval_center=center,
+                                                   epsilon_zero_avoidance=epsilon)
+            dm_0 = se2.se2g_log(m_0)
 
-            # Generate svf
-            svf_0   = SVF.generate_from_matrix(domain, dm_0.get_matrix, affine=np.eye(4))
-            disp_0  = SDISP.generate_from_matrix(domain, m_0.get_matrix - np.eye(3), affine=np.eye(4))
+            # Generate SVF
+            svf_0        = generate_from_matrix(omega, dm_0.get_matrix, t=1, structure='algebra')
+            disp_ground  = generate_from_matrix(omega, m_0.get_matrix, t=1, structure='group')
 
             for m in range(num_method_considered):  # method
                 if names_method_considered[m] == 'vode' or names_method_considered[m] == 'lsoda':
                     start = time.time()
-                    disp_computed = svf_0.exponential_scipy(integrator=names_method_considered[m],
-                                                            max_steps=steps_methods_considered[m])
+                    disp_computed = lie_exponential_scipy(svf_0, integrator=names_method_considered[m],
+                                                          max_steps=steps_methods_considered[m])
                     res_time[m] = (time.time() - start)
 
                 else:
                     start = time.time()
-                    disp_computed = svf_0.exponential(algorithm=names_method_considered[m],
-                                                      s_i_o=s_i_o,
-                                                      input_num_steps=steps_methods_considered[m])
+                    disp_computed = lie_exponential(svf_0, algorithm=names_method_considered[m], s_i_o=s_i_o,
+                                                    input_num_steps=steps_methods_considered[m])
                     res_time[m, s] = (time.time() - start)
 
                 # compute error:
-                errors[m, s] = (disp_computed - disp_0).norm(passe_partout_size=pp, normalized=True)
+                errors[m, s] = vf_norm(disp_computed - disp_ground, passe_partout_size=pp, normalized=True)
 
             if verbose:
 
@@ -175,13 +171,13 @@ if __name__ == "__main__":
                 print '--------------------'
 
         ### Save data to folder ###
-        np.save(fullpath_array_errors_output,       errors)
-        np.save(fullpath_array_comp_time_output,    res_time)
+        np.save(pfi_array_errors_output,       errors)
+        np.save(pfi_array_comp_time_output,    res_time)
 
-        with open(fullpath_transformation_parameters, 'wb') as f:
+        with open(pfi_transformation_parameters, 'wb') as f:
             pickle.dump(parameters, f)
 
-        with open(fullpath_numerical_method_table, 'wb') as f:
+        with open(pfi_numerical_method_table, 'wb') as f:
             pickle.dump(methods, f)
 
         print
@@ -190,13 +186,13 @@ if __name__ == "__main__":
         print '------------------------------------------'
 
     else:
-        errors     = np.load(fullpath_array_errors_output)
-        res_time   = np.load(fullpath_array_comp_time_output)
+        errors     = np.load(pfi_array_errors_output)
+        res_time   = np.load(pfi_array_comp_time_output)
 
-        with open(fullpath_transformation_parameters, 'rb') as f:
+        with open(pfi_transformation_parameters, 'rb') as f:
             parameters = pickle.load(f)
 
-        with open(fullpath_numerical_method_table, 'rb') as f:
+        with open(pfi_numerical_method_table, 'rb') as f:
             methods = pickle.load(f)
 
         print
@@ -295,9 +291,10 @@ if __name__ == "__main__":
     ### Save figures in external folder ###
 
     if save_external:
+        os.system('mkdir -p {}'.format(pfo_notes_figures))
         # Save table csv
-        # np.savetxt(fullpath_csv_table_errors_output, errors, delimiter=" & ")
-        # np.savetxt(fullpath_csv_table_comp_time_output, errors, delimiter=" & ")
+        # np.savetxt(pfi_csv_table_errors_output, errors, delimiter=" & ")
+        # np.savetxt(pfi_csv_table_comp_time_output, errors, delimiter=" & ")
         # Save image:
-        plt.savefig(fullpath_figure_output, format='pdf', dpi=400)
-        print 'Figure ' + filename_figure_output + ' saved in the external folder ' + str(fullpath_figure_output)
+        plt.savefig(pfi_figure_output, format='pdf', dpi=400)
+        print 'Figure ' + fin_figure_output + ' saved in the external folder ' + str(pfi_figure_output)

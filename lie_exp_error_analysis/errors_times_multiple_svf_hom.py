@@ -1,12 +1,20 @@
-import copy
 import os
 import pickle
 import time
+from os.path import join as jph
 
 import matplotlib.pyplot as plt
 import numpy as np
 from sympy.core.cache import clear_cache
 from tabulate import tabulate
+
+from VECtorsToolkit.tools.transformations.pgl2 import randomgen_homography
+from VECtorsToolkit.tools.fields.generate_vf import generate_from_projective_matrix
+from VECtorsToolkit.tools.local_operations.lie_exponential import lie_exponential_scipy, lie_exponential
+from VECtorsToolkit.tools.fields.queries import vf_norm
+
+from VECtorsToolkit.tools.visualisations.fields.fields_at_the_window import see_2_fields
+
 
 from controller import methods_t_s
 from path_manager import pfo_results, pfo_notes_figures, pfo_notes_tables
@@ -26,10 +34,10 @@ if __name__ == "__main__":
     ### Controller ###
     ##################
 
-    compute = True
-    verbose = True
-    save_external = False
-    plot_results = True
+    compute       = True
+    verbose       = True
+    save_external = True
+    plot_results  = True
 
     #######################
     ### Path management ###
@@ -50,18 +58,19 @@ if __name__ == "__main__":
     fin_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
 
     # paths to results in internal to the project
-    pfo_errors_times_results = os.path.join(pfo_results, 'errors_times_results')
+    pfo_errors_times_results = jph(pfo_results, 'errors_times_results')
 
-    pfi_array_errors_output = os.path.join(pfo_errors_times_results, fin_array_errors_output + file_suffix + '.npy')
-    pfi_array_comp_time_output = os.path.join(pfo_errors_times_results, fin_array_comp_time_output + file_suffix + '.npy')
-    pfi_field = os.path.join(pfo_errors_times_results, fin_field + file_suffix + '.npy')
-    pfi_transformation_parameters = os.path.join(pfo_errors_times_results, fin_transformation_parameters + file_suffix + '.npy')
-    pfi_numerical_method_table = os.path.join(pfo_errors_times_results, fin_numerical_methods_table + file_suffix)
+    os.system('mkdir -p {}'.format(pfo_errors_times_results))
+    print("\nPath to results folder {}\n".format(pfo_errors_times_results))
 
-    # path to results external to the project:
-    pfi_figure_output  = os.path.join(pfo_notes_figures, fin_figure_output + file_suffix + '.pdf')
-    pfi_csv_table_errors_output = os.path.join(pfo_notes_tables, fin_csv_table_errors_output + '.csv')
-    pfi_csv_table_comp_time_output = os.path.join(pfo_notes_tables, fin_csv_table_comp_time_output + '.csv')
+    pfi_array_errors_output        = jph(pfo_errors_times_results, fin_array_errors_output + file_suffix + '.npy')
+    pfi_array_comp_time_output     = jph(pfo_errors_times_results, fin_array_comp_time_output + file_suffix + '.npy')
+    pfi_field                      = jph(pfo_errors_times_results, fin_field + file_suffix + '.npy')
+    pfi_transformation_parameters  = jph(pfo_errors_times_results, fin_transformation_parameters + file_suffix + '.npy')
+    pfi_numerical_method_table     = jph(pfo_errors_times_results, fin_numerical_methods_table + file_suffix)
+    pfi_figure_output              = jph(pfo_notes_figures, fin_figure_output + file_suffix + '.pdf')
+    pfi_csv_table_errors_output    = jph(pfo_notes_tables, fin_csv_table_errors_output + '.csv')
+    pfi_csv_table_comp_time_output = jph(pfo_notes_tables, fin_csv_table_comp_time_output + '.csv')
 
     ####################
     ### Computations ###
@@ -80,14 +89,13 @@ if __name__ == "__main__":
         # Parameters SVF:
         x_1, y_1, z_1 = 50, 50, 1
 
-        N = 50
+        N = 10
 
         in_psl = False
 
         if z_1 == 1:
             d = 2
-            domain = (x_1, y_1)
-            shape = list(domain) + [1, 1, 2]
+            omega = (x_1, y_1)
 
             # center of the homography
             x_c = x_1 / 2
@@ -98,8 +106,7 @@ if __name__ == "__main__":
 
         else:
             d = 3
-            domain = (x_1, y_1, z_1)
-            shape = list(domain) + [1, 3]
+            omega = (x_1, y_1, z_1)
 
             # center of the homography
             x_c = x_1 / 2
@@ -109,7 +116,7 @@ if __name__ == "__main__":
 
             projective_center = [x_c, y_c, z_c, w_c]
 
-        scale_factor = 1. / (np.max(domain) * 10)
+        scale_factor = 1. / (np.max(omega) * 1000)
         hom_attributes = [d, scale_factor, 1, in_psl]
 
         # import methods from external file aaa_general_controller
@@ -136,45 +143,44 @@ if __name__ == "__main__":
         for s in range(N):  # sampling
 
             # Generate SVF and displacement:
-            h_a, h_g = get_random_hom_a_matrices(d=hom_attributes[0],
-                                                 scale_factor=hom_attributes[1],
-                                                 sigma=hom_attributes[2],
-                                                 special=hom_attributes[3])
+            h_a, h_g = randomgen_homography(d=hom_attributes[0], scale_factor=hom_attributes[1],
+                                            center=projective_center, sigma=hom_attributes[2],
+                                            special=hom_attributes[3], get_as_matrix=True)
 
             # generate SVF
-            svf_0 = SVF.generate_from_projective_matrix_algebra(input_vol_ext=domain, input_h=h_a)
-            disp_0 = SDISP.generate_from_projective_matrix_group(input_vol_ext=domain, input_exp_h=h_g)
+            svf_0       = generate_from_projective_matrix(omega, h_a, structure='algebra')
+            disp_ground = generate_from_projective_matrix(omega, h_g, structure='group')
 
-            # Store the vector field (for the image)
-            svf_as_array = copy.deepcopy(svf_0.field)
+            see_2_fields(svf_0, disp_ground)
 
             for m in range(num_method_considered):
                 if names_method_considered[m] == 'vode' or names_method_considered[m] == 'lsoda':
                     start = time.time()
-                    disp_computed = svf_0.exponential_scipy(integrator=names_method_considered[m],
-                                                            max_steps=steps_methods_considered[m])
+                    disp_0 = lie_exponential_scipy(svf_0, integrator=names_method_considered[m],
+                                                   max_steps=steps_methods_considered[m])
                     res_time[m, s] = (time.time() - start)
 
                 else:
                     start = time.time()
-                    disp_computed = svf_0.exponential(algorithm=names_method_considered[m],
-                                                      s_i_o=s_i_o,
-                                                      input_num_steps=steps_methods_considered[m])
+                    disp_0 = lie_exponential(svf_0, algorithm=names_method_considered[m], s_i_o=s_i_o,
+                                             input_num_steps=steps_methods_considered[m])
                     res_time[m, s] = (time.time() - start)
 
                 # compute error:
-                errors[m, s] = (disp_computed - disp_0).norm(passe_partout_size=pp, normalized=True)
+                errors[m, s] = vf_norm(disp_0 - disp_ground, passe_partout_size=pp, normalized=True)
+
+            print errors
 
             print '--------------------'
             print 'Sampling ' + str(s + 1) + '/' + str(N) + ' .'
             print '--------------------'
 
-        parameters = [x_1, y_1, z_1] + hom_attributes + [N]
+        parameters = [[x_1, y_1, z_1]] + [projective_center] + [hom_attributes] + [N]
 
         ### Save data to folder ###
         np.save(pfi_array_errors_output,       errors)
         np.save(pfi_array_comp_time_output,    res_time)
-        np.save(pfi_field,                     svf_as_array)
+        np.save(pfi_field,                     svf_0)
 
         with open(pfi_transformation_parameters, 'wb') as f:
             pickle.dump(parameters, f)
@@ -220,15 +226,12 @@ if __name__ == "__main__":
 
         print 'Error-bar and time for multiple hom generated SVF'
         print '---------------------------------------------'
-
+        # parameters = [[x_1, y_1, z_1]] + [projective_center] + [hom_attributes] + [N]
         print '\nParameters of the transformation hom:'
-        print 'domain = ' + str(parameters[:3])
-        print 'center = ' + str(parameters[3])
-        print 'kind = ' + str(parameters[4])
-        print 'scale factor = ' + str(parameters[5])
-        print 'sigma = ' + str(parameters[6])
-        print 'in psl = ' + str(parameters[7])
-        print 'number of samples = ' + str(parameters[8])
+        print 'domain = ' + str(parameters[0])
+        print 'center = ' + str(parameters[1])
+        print 'hom attributes d, scale factor, sigma, special = ' + str(parameters[2])
+        print 'number of samples = ' + str(parameters[3])
 
         print '\n'
         print 'Methods and parameters:'
@@ -276,8 +279,7 @@ if __name__ == "__main__":
                             window_title_input='bar_plot_multiple_se2',
                             additional_field=None,
                             log_scale=True,
-                            input_parameters=parameters,
-
+                            input_parameters=None,
                             annotate_mean=True,
                             add_extra_annotation=mean_res_time)
         plt.show()

@@ -8,7 +8,8 @@ import numpy as np
 from sympy.core.cache import clear_cache
 from tabulate import tabulate
 
-from controller import methods_t_s, pfo_results, pfo_notes_figures, pfo_notes_sharing
+from controller import methods_t_s
+from path_manager import pfo_results, pfo_notes_figures, pfo_notes_sharing
 from visualizer.graphs_and_stats_new import plot_custom_bar_chart_with_error
 
 """

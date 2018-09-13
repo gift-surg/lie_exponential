@@ -56,16 +56,16 @@ if __name__ == "__main__":
     fin_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
 
     # paths to results in internal to the project
-    pfo_error_time_results = jph(pfo_results, 'errors_times_results')
+    pfo_errors_time_results = jph(pfo_results, 'errors_times_results')
 
-    os.system('mkdir -p {}'.format(pfo_error_time_results))
-    print("\nPath to results folder {}\n".format(pfo_error_time_results))
+    os.system('mkdir -p {}'.format(pfo_errors_time_results))
+    print("\nPath to results folder {}\n".format(pfo_errors_time_results))
 
-    pfi_array_errors_output        = jph(pfo_error_time_results, fin_array_errors_output + file_suffix + '.npy')
-    pfi_array_comp_time_output     = jph(pfo_error_time_results, fin_array_comp_time_output + file_suffix + '.npy')
-    pfi_field                      = jph(pfo_error_time_results, fin_field + file_suffix + '.npy')
-    pfi_transformation_parameters  = jph(pfo_error_time_results, fin_transf_parameters + file_suffix + '.npy')
-    pfi_numerical_method_table     = jph(pfo_error_time_results, fin_numerical_methods_table + file_suffix)
+    pfi_array_errors_output        = jph(pfo_errors_time_results, fin_array_errors_output + file_suffix + '.npy')
+    pfi_array_comp_time_output     = jph(pfo_errors_time_results, fin_array_comp_time_output + file_suffix + '.npy')
+    pfi_field                      = jph(pfo_errors_time_results, fin_field + file_suffix + '.npy')
+    pfi_transformation_parameters  = jph(pfo_errors_time_results, fin_transf_parameters + file_suffix + '.npy')
+    pfi_numerical_method_table     = jph(pfo_errors_time_results, fin_numerical_methods_table + file_suffix)
     pfi_figure_output              = jph(pfo_notes_figures, fin_figure_output + file_suffix + '.pdf')
     pfi_csv_table_errors_output    = jph(pfo_notes_tables, fin_csv_table_errors_output + '.csv')
     pfi_csv_table_comp_time_output = jph(pfo_notes_tables, fin_csv_table_comp_time_output + '.csv')
