@@ -7,8 +7,14 @@ import numpy as np
 from sympy.core.cache import clear_cache
 from tabulate import tabulate
 
-from controller import methods_t_s, path_to_results_folder, path_to_exp_notes_figures, \
-    path_to_exp_notes_tables
+from controller import methods_t_s
+
+from VECtorsToolkit.tools.fields.generate_vf import generate_random
+from VECtorsToolkit.tools.local_operations.lie_exponential import lie_exponential, lie_exponential_scipy
+from VECtorsToolkit.tools.fields.queries import vf_norm
+from VECtorsToolkit.tools.fields.composition import lagrangian_dot_lagrangian
+
+from path_manager import pfo_results, pfo_notes_figures, pfo_notes_sharing
 from visualizer.graphs_and_stats_new import plot_custom_step_versus_error_multiple
 
 """
@@ -24,10 +30,10 @@ if __name__ == "__main__":
     ### Controller ###
     ###################
 
-    compute = True
-    verbose = True
+    compute       = True
+    verbose       = True
     save_external = True
-    plot_results = True
+    plot_results  = True
 
     # The results, and additional information are loaded in see_error_time_results
     # with a simplified name. They are kept safe from other subsequent tests with the same code.
@@ -42,32 +48,28 @@ if __name__ == "__main__":
     number = 'multiple'
     file_suffix  = '_' + str(1)
 
-    filename_figure_output              = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_figure'
-    filename_csv_table_errors_output    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_errors'
-    filename_csv_table_comp_time_output = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_cp_time'
-    filename_array_errors_output        = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_array_errors'
-    filename_transformation_parameters  = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_parameters'
-    filename_field                      = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_field'
-    filename_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
+    fin_figure_output              = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_figure'
+    fin_csv_table_errors_output    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_errors'
+    fin_csv_table_comp_time_output = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_csv_cp_time'
+    fin_array_errors_output        = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_array_errors'
+    fin_transformation_parameters  = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_parameters'
+    fin_field                      = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_field'
+    fin_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
 
     # paths to results in internal to the project
-    path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
-    fullpath_array_errors_output = os.path.join(path_to_results_folder,
-                                                    filename_array_errors_output + file_suffix + '.npy')
-    fullpath_transformation_parameters = os.path.join(path_to_results_folder,
-                                                      filename_transformation_parameters + file_suffix)
-    fullpath_field = os.path.join(path_to_results_folder,
-                                  filename_field + file_suffix + '.npy')
-    fullpath_numerical_method_table = os.path.join(path_to_results_folder,
-                                                   filename_numerical_methods_table + file_suffix)
+    pfo_errors_times_results = os.path.join(pfo_results, 'errors_times_results')
+
+    print("\nPath to results folder {}\n".format(pfo_errors_times_results))
+
+    pfi_array_errors_output = os.path.join(pfo_errors_times_results, fin_array_errors_output + file_suffix + '.npy')
+    pfi_transformation_parameters = os.path.join(pfo_errors_times_results, fin_transformation_parameters + file_suffix)
+    pfi_field = os.path.join(pfo_errors_times_results, fin_field + file_suffix + '.npy')
+    pfi_numerical_method_table = os.path.join(pfo_errors_times_results, fin_numerical_methods_table + file_suffix)
 
     # path to results external to the project:
-    fullpath_figure_output  = os.path.join(path_to_exp_notes_figures,
-                                           filename_figure_output + file_suffix + '.pdf')
-    fullpath_csv_table_errors_output = os.path.join(path_to_exp_notes_tables,
-                                                    filename_csv_table_errors_output + '.csv')
-    fullpath_csv_table_comp_time_output = os.path.join(path_to_exp_notes_tables,
-                                                       filename_csv_table_comp_time_output + '.csv')
+    pfi_figure_output  = os.path.join(pfo_notes_figures, fin_figure_output + file_suffix + '.pdf')
+    pfi_csv_table_errors_output = os.path.join(pfo_notes_sharing, fin_csv_table_errors_output + '.csv')
+    pfi_csv_table_comp_time_output = os.path.join(pfo_notes_sharing, fin_csv_table_comp_time_output + '.csv')
 
     ####################
     ### Computations ###
@@ -84,11 +86,9 @@ if __name__ == "__main__":
         x_1, y_1, z_1 = 20, 20, 10
 
         if z_1 == 1:
-            domain = (x_1, y_1)
-            shape = list(domain) + [1, 1, 2]
+            omega = (x_1, y_1)
         else:
-            domain = (x_1, y_1, z_1)
-            shape = list(domain) + [1, 3]
+            omega = (x_1, y_1, z_1)
 
         sigma_init = 4
         sigma_gaussian_filter = 2
@@ -117,17 +117,13 @@ if __name__ == "__main__":
         print '---------------------'
 
         # init data
-        svf_as_array = None
+        svf_0 = None
         errors = np.zeros([num_method_considered, len(list_steps), N])
 
         for s in range(N):  # sample
             # Generate svf
-            svf_0   = SVF.generate_random_smooth(shape=shape,
-                                                 sigma=sigma_init,
-                                                 sigma_gaussian_filter=sigma_gaussian_filter)
-
-            svf_0_inv   = -1*svf_0
-            svf_as_array = copy.deepcopy(svf_0.field)
+            svf_0   = generate_random(omega, parameters=(sigma_init, sigma_gaussian_filter))
+            svf_0_inv   = -1 * svf_0
 
             for step_index, step_num in enumerate(list_steps):
 
@@ -135,26 +131,24 @@ if __name__ == "__main__":
 
                     if names_method_considered[met] == 'vode' or names_method_considered[met] == 'lsoda':
 
-                        disp_computed = svf_0.exponential_scipy(integrator=names_method_considered[met],
-                                                                max_steps=step_num)
+                        sdisp_0 = lie_exponential_scipy(svf_0, integrator=names_method_considered[met],
+                                                        max_steps=step_num)
 
-                        disp_computed_inv = svf_0_inv.exponential_scipy(integrator=names_method_considered[met],
-                                                                        max_steps=step_num)
+                        disp_0_inv = lie_exponential_scipy(svf_0_inv, integrator=names_method_considered[met],
+                                                           max_steps=step_num)
 
                     else:
 
-                        disp_computed = svf_0.exponential(algorithm=names_method_considered[met],
-                                                          s_i_o=s_i_o,
-                                                          input_num_steps=step_num)
-                        disp_computed_inv = svf_0_inv.exponential(algorithm=names_method_considered[met],
-                                                                  s_i_o=s_i_o,
-                                                                  input_num_steps=step_num)
+                        sdisp_0 = lie_exponential(svf_0, algorithm=names_method_considered[met], s_i_o=s_i_o,
+                                                  input_num_steps=step_num)
+                        disp_0_inv = lie_exponential(svf_0_inv, algorithm=names_method_considered[met], s_i_o=s_i_o,
+                                                     input_num_steps=step_num)
                     # compute error:
-                    sdisp_o_sdisp_inv = SDISP.composition(disp_computed, disp_computed_inv, s_i_o=s_i_o)
-                    sdisp_inv_o_sdisp = SDISP.composition(disp_computed_inv, disp_computed, s_i_o=s_i_o)
+                    sdisp_o_sdisp_inv = lagrangian_dot_lagrangian(sdisp_0, disp_0_inv, s_i_o=s_i_o)
+                    sdisp_inv_o_sdisp = lagrangian_dot_lagrangian(disp_0_inv, sdisp_0, s_i_o=s_i_o)
 
-                    errors[met, step_index, s] = 0.5 * (sdisp_o_sdisp_inv.norm(passe_partout_size=pp, normalized=True) +
-                                                        sdisp_inv_o_sdisp.norm(passe_partout_size=pp, normalized=True))
+                    errors[met, step_index, s] = .5 * (vf_norm(sdisp_o_sdisp_inv, passe_partout_size=pp, normalized=True) +
+                                                       vf_norm(sdisp_inv_o_sdisp, passe_partout_size=pp, normalized=True))
 
                 # tabulate the results:
                 print 'Step ' + str(step_num) + ' phase  ' + str(step_index + 1) + '/' + str(len(list_steps)) + \
@@ -170,13 +164,13 @@ if __name__ == "__main__":
 
         ### Save data to folder ###
 
-        np.save(fullpath_array_errors_output, errors)
-        np.save(fullpath_field, svf_as_array)
+        np.save(pfi_array_errors_output, errors)
+        np.save(pfi_field, svf_0)
 
-        with open(fullpath_transformation_parameters, 'wb') as f:
+        with open(pfi_transformation_parameters, 'wb') as f:
             pickle.dump(parameters, f)
 
-        with open(fullpath_numerical_method_table, 'wb') as f:
+        with open(pfi_numerical_method_table, 'wb') as f:
             pickle.dump(methods, f)
 
         print
@@ -186,10 +180,10 @@ if __name__ == "__main__":
 
         if save_for_sharing:
 
-            path_to_sharing_folder = os.path.join(path_to_results_folder, 'sharing_folder')
+            path_to_sharing_folder = os.path.join(pfo_errors_times_results, 'sharing_folder')
 
             np.save(os.path.join(path_to_sharing_folder, 'inv_consistency_errors_gauss'), errors)
-            np.save(os.path.join(path_to_sharing_folder, 'inv_consistency_svf'), svf_as_array)
+            np.save(os.path.join(path_to_sharing_folder, 'inv_consistency_svf'), svf_0)
 
             with open(os.path.join(path_to_sharing_folder, 'inv_consistency_parameters'), 'wb') as f:
                 pickle.dump(parameters, f)
@@ -204,13 +198,13 @@ if __name__ == "__main__":
 
     else:
 
-        errors       = np.load(fullpath_array_errors_output)
-        svf_as_array = np.load(fullpath_field)
+        errors       = np.load(pfi_array_errors_output)
+        svf_0 = np.load(pfi_field)
 
-        with open(fullpath_transformation_parameters, 'rb') as f:
+        with open(pfi_transformation_parameters, 'rb') as f:
             parameters = pickle.load(f)
 
-        with open(fullpath_numerical_method_table, 'rb') as f:
+        with open(pfi_numerical_method_table, 'rb') as f:
             methods = pickle.load(f)
 
         print
@@ -279,7 +273,7 @@ if __name__ == "__main__":
                                                names_method_considered,
                                                input_parameters=None, fig_tag=2, log_scale=True,
                                                additional_vertical_line=None,
-                                               additional_field=svf_as_array,
+                                               additional_field=svf_0,
                                                kind='multiple_GAUSS',
                                                titles=('inverse consistency errors vs iterations', 'Fields like:'),
                                                input_marker=marker_method_considered,

@@ -32,10 +32,10 @@ if __name__ == "__main__":
     ### Controller ###
     ##################
 
-    compute = True
-    verbose = True
+    compute       = False
+    verbose       = True
     save_external = False
-    plot_results = True
+    plot_results  = True
 
     #######################
     ### Path management ###
@@ -56,13 +56,16 @@ if __name__ == "__main__":
     fin_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
 
     # paths to results in internal to the project
-    pfo_results = os.path.join(pfo_results, 'errors_times_results')
+    pfo_errors_times_results = os.path.join(pfo_results, 'errors_times_results')
 
-    pfi_array_errors_output = os.path.join(pfo_results, fin_array_errors_output + file_suffix + '.npy')
-    pfi_array_comp_time_output = os.path.join(pfo_results, fin_array_comp_time_output + file_suffix + '.npy')
-    pfi_field = os.path.join(pfo_results, fin_field + file_suffix + '.npy')
-    pfi_transformation_parameters = os.path.join(pfo_results, fin_transformation_parameters + file_suffix + '.npy')
-    pfi_numerical_method_table = os.path.join(pfo_results, fin_numerical_methods_table + file_suffix)
+    os.system('mkdir -p {}'.format(pfo_errors_times_results))
+    print("\nPath to results folder {}\n".format(pfo_errors_times_results))
+
+    pfi_array_errors_output = os.path.join(pfo_errors_times_results, fin_array_errors_output + file_suffix + '.npy')
+    pfi_array_comp_time_output = os.path.join(pfo_errors_times_results, fin_array_comp_time_output + file_suffix + '.npy')
+    pfi_field = os.path.join(pfo_errors_times_results, fin_field + file_suffix + '.npy')
+    pfi_transformation_parameters = os.path.join(pfo_errors_times_results, fin_transformation_parameters + file_suffix + '.npy')
+    pfi_numerical_method_table = os.path.join(pfo_errors_times_results, fin_numerical_methods_table + file_suffix)
 
     # path to results external to the project:
     pfi_figure_output  = os.path.join(pfo_notes_figures, fin_figure_output + file_suffix + '.pdf')

@@ -7,8 +7,8 @@ import numpy as np
 from sympy.core.cache import clear_cache
 from tabulate import tabulate
 
-from controller import methods_t_s, path_to_results_folder, path_to_exp_notes_figures, \
-    path_to_exp_notes_tables, path_to_sharing_folder
+from controller import methods_t_s, pfo_results, pfo_notes_figures, \
+    pfo_notes_sharing, path_to_sharing_folder
 from visualizer.graphs_and_stats_new import plot_custom_time_error_steps
 
 """
@@ -50,7 +50,7 @@ if __name__ == "__main__":
     filename_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
 
     # paths to results in internal to the project
-    path_to_results_folder = os.path.join(path_to_results_folder, 'errors_times_results')
+    path_to_results_folder = os.path.join(pfo_results, 'errors_times_results')
 
     fullpath_array_jacobian_output = os.path.join(path_to_results_folder,
                                                   filename_array_jacobian_output + file_suffix + '.npy')
@@ -62,9 +62,9 @@ if __name__ == "__main__":
                                                    filename_numerical_methods_table + file_suffix)
 
     # path to results external to the project:
-    fullpath_figure_output  = os.path.join(path_to_exp_notes_figures,
+    fullpath_figure_output  = os.path.join(pfo_notes_figures,
                                            filename_figure_output + file_suffix + '.pdf')
-    fullpath_csv_table_errors_output = os.path.join(path_to_exp_notes_tables,
+    fullpath_csv_table_errors_output = os.path.join(pfo_notes_sharing,
                                                     filename_csv_table_errors_output + '.csv')
 
     ####################

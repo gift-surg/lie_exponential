@@ -1,6 +1,7 @@
 import os
 import pickle
 import time
+from os.path import join as jph
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -55,20 +56,19 @@ if __name__ == "__main__":
     fin_numerical_methods_table    = str(prefix_fn) + '_' + str(number) + '_svf_' + str(kind) + '_methods'
 
     # paths to results in internal to the project
-    pfo_error_time_results = os.path.join(pfo_results, 'errors_times_results')
+    pfo_error_time_results = jph(pfo_results, 'errors_times_results')
 
     os.system('mkdir -p {}'.format(pfo_error_time_results))
+    print("\nPath to results folder {}\n".format(pfo_error_time_results))
 
-    pfi_array_errors_output = os.path.join(pfo_error_time_results, fin_array_errors_output + file_suffix + '.npy')
-    pfi_array_comp_time_output = os.path.join(pfo_error_time_results, fin_array_comp_time_output + file_suffix + '.npy')
-    pfi_field = os.path.join(pfo_error_time_results, fin_field + file_suffix + '.npy')
-    pfi_transformation_parameters = os.path.join(pfo_error_time_results, fin_transf_parameters + file_suffix + '.npy')
-    pfi_numerical_method_table = os.path.join(pfo_error_time_results, fin_numerical_methods_table + file_suffix)
-
-    # path to results external to the project:
-    pfi_figure_output  = os.path.join(pfo_notes_figures, fin_figure_output + file_suffix + '.pdf')
-    pfi_csv_table_errors_output = os.path.join(pfo_notes_tables, fin_csv_table_errors_output + '.csv')
-    pfi_csv_table_comp_time_output = os.path.join(pfo_notes_tables, fin_csv_table_comp_time_output + '.csv')
+    pfi_array_errors_output        = jph(pfo_error_time_results, fin_array_errors_output + file_suffix + '.npy')
+    pfi_array_comp_time_output     = jph(pfo_error_time_results, fin_array_comp_time_output + file_suffix + '.npy')
+    pfi_field                      = jph(pfo_error_time_results, fin_field + file_suffix + '.npy')
+    pfi_transformation_parameters  = jph(pfo_error_time_results, fin_transf_parameters + file_suffix + '.npy')
+    pfi_numerical_method_table     = jph(pfo_error_time_results, fin_numerical_methods_table + file_suffix)
+    pfi_figure_output              = jph(pfo_notes_figures, fin_figure_output + file_suffix + '.pdf')
+    pfi_csv_table_errors_output    = jph(pfo_notes_tables, fin_csv_table_errors_output + '.csv')
+    pfi_csv_table_comp_time_output = jph(pfo_notes_tables, fin_csv_table_comp_time_output + '.csv')
 
     ####################
     ### Computations ###
@@ -254,7 +254,6 @@ if __name__ == "__main__":
                    headers=['method', 'mean error', 'mean comp. time (sec)'])
     print '\nEND'
 
-    # plot results
     if plot_results:
 
         reordered_errors_for_plot = []
@@ -263,7 +262,6 @@ if __name__ == "__main__":
             reordered_errors_for_plot += [list(errors[m, :])]
             reordered_times_for_plot += [list(res_time[m, :])]
 
-        # BOX-PLOT custom
         plot_custom_boxplot(input_data=reordered_errors_for_plot,
                             input_names=names_method_considered,
                             fig_tag=11,

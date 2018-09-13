@@ -15,4 +15,3 @@ methods_t_s = [['ss',        True,    7,    'b',      '-',     '+'],
                ['rk4',       True,    10,   'y',      '--',    'x'],
                ['vode',      False,    7,   'r',    '--',       '.'],
                ['lsoda',     False,    7,  'g',    '--',      '.']]
-

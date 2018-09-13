@@ -11,12 +11,11 @@ pfi : path to file
 """
 
 import os
-
 from os.path import join as jph
 
 
 root_dir = os.path.abspath(os.path.dirname(__file__))
-root_data_storage = jph('Volumes', 'SmartWare', 'lie_exponential')
+root_data_storage = jph('/Volumes', 'SmartWare', 'lie_exponential')
 
 if not os.path.exists(root_data_storage):
     print('Connect to data storage or set path in {}'.format(__file__))
