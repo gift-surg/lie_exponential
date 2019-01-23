@@ -82,7 +82,7 @@ if __name__ == "__main__":
 
     if compute:  # or compute or load
 
-        random_seed = 10
+        random_seed = 0
 
         if random_seed > 0:
             np.random.seed(random_seed)
@@ -208,6 +208,8 @@ if __name__ == "__main__":
         with open(fullpath_transformation_parameters, 'rb') as f:
             parameters = pickle.load(f)
 
+            parameters += [False]
+
         with open(fullpath_numerical_method_table, 'rb') as f:
             methods = pickle.load(f)
 
@@ -240,7 +242,6 @@ if __name__ == "__main__":
         print 'kind = ' + str(parameters[4])
         print 'scale factor = ' + str(parameters[5])
         print 'sigma = ' + str(parameters[6])
-        print 'in psl = ' + str(parameters[7])
 
         print '\n'
         print 'Methods and parameters:'

@@ -98,7 +98,7 @@ def plot_custom_bar_chart_with_error(input_data,
             fig.text(.78, .70, r'kind: ' + str(input_parameters[4]))
             fig.text(.78, .65, r'scale_factor: ' + str(input_parameters[5]))
             fig.text(.78, .60, r'sigma: ' + str(input_parameters[6]))
-            fig.text(.78, .55, r'in_psl: ' + str(input_parameters[7]))
+            # fig.text(.78, .55, r'in_psl: ' + str(input_parameters[7]))
 
         elif kind == 'one_GAUSS':
             fig.text(.765, .85,  r'Gauss generated SVF: ')
